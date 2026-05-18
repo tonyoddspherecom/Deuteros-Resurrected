@@ -12,6 +12,10 @@ namespace Deuteros.Code.Platform.Screens
         public AudioStream DoorSound { get; set; }
         private AudioStreamPlayer DoorButtonSound { get; set; }
 
+        private CanvasModulate _modulateNode;
+        private bool _isDimmed = false;
+
+
         private AnimatedSprite2D ResearchDoorAnimation;
         private AnimatedSprite2D ProductionDoorAnimation;
         private AnimatedSprite2D MarinesDoorAnimation;
@@ -25,10 +29,29 @@ namespace Deuteros.Code.Platform.Screens
         private const string Open_Animation_Name = "open";
         private const string Close_Animation_Name = "close";
 
+
+
+        public override void _ExitTree()
+        {
+            base._ExitTree();
+            if (_modulateNode != null)
+                _modulateNode.Color = new Color(1, 1, 1);
+            _isDimmed = false;
+        }
+
         // Called when the node enters the scene tree for the first time.
         public override void _Ready()
         {
             base._Ready();
+
+            // Use an existing CanvasModulate in the scene if present, otherwise create one
+            _modulateNode = GetNodeOrNull<CanvasModulate>("CanvasModulate");
+            if (_modulateNode == null)
+            {
+                _modulateNode = new CanvasModulate();
+                AddChild(_modulateNode);
+            }
+            _modulateNode.Color = new Color(1, 1, 1);
 
             var researchButtonDown = GetNode<RepeatingButton>("Doors/Research/MinusButton/ResearchMinusButton");
             var researchButtonUp = GetNode<RepeatingButton>("Doors/Research/PlusButton/ResearchPlusButton");
@@ -37,30 +60,32 @@ namespace Deuteros.Code.Platform.Screens
             var marinesButtonDown = GetNode<RepeatingButton>("Doors/Marines/MinusButton/MarinesMinusButton");
             var marinesButtonUp = GetNode<RepeatingButton>("Doors/Marines/PlusButton/MarinesPlusButton");
 
+            var lightSwitch = GetNode<RepeatingButton>("Doors/LightSwitchButton");
+
             researchButtonDown.Connect("pressed", new Callable(this, nameof(ResearchMinusButton_Pressed)));
             researchButtonUp.Connect("pressed", new Callable(this, nameof(ResearchPlusButton_Pressed)));
             productionButtonDown.Connect("pressed", new Callable(this, nameof(ProductionMinusButton_Pressed)));
             productionButtonUp.Connect("pressed", new Callable(this, nameof(ProductionPlusButton_Pressed)));
             marinesButtonDown.Connect("pressed", new Callable(this, nameof(MarinesMinusButton_Pressed)));
             marinesButtonUp.Connect("pressed", new Callable(this, nameof(MarinesPlusButton_Pressed)));
-
+            lightSwitch.Connect("pressed", new Callable(this, nameof(LightSwitchButton_Pressed)));
             ResearchButtons = new List<RepeatingButton>
-            {
-                researchButtonDown,
-                researchButtonUp
-            };
+                {
+                     researchButtonDown,
+                     researchButtonUp
+                };
 
             ProductionButtons = new List<RepeatingButton>
-            {
-                productionButtonDown,
-                productionButtonUp
-            };
+                {
+                     productionButtonDown,
+                     productionButtonUp
+                };
 
             MarinesButtons = new List<RepeatingButton>
-            {
-                marinesButtonDown,
-                marinesButtonUp
-            };
+                {
+                     marinesButtonDown,
+                     marinesButtonUp
+                };
 
             ResearchDoorAnimation = GetNode<Node2D>("Doors/Research/TrainingDoors").GetNode<AnimatedSprite2D>("DoorAnimation");
 
@@ -191,10 +216,10 @@ namespace Deuteros.Code.Platform.Screens
 
             if (!GameCore.Earth.TrainingData.ResearcherLocked && GameCore.Earth.TrainingData.ResearcherTrainingMax > GameCore.Earth.TrainingData.ResearcherTrainingCount &&
             (
-                earth.ResearchStaff == null
-                ||
-                (earth.ResearchStaff.Count + GameCore.Earth.TrainingData.ResearcherTrainingCount) < GameCore.Earth.TrainingData.ResearcherMaxCount)
-                )
+                 earth.ResearchStaff == null
+                 ||
+                 (earth.ResearchStaff.Count + GameCore.Earth.TrainingData.ResearcherTrainingCount) < GameCore.Earth.TrainingData.ResearcherMaxCount)
+                 )
             {
                 GameCore.Earth.TrainingData.ResearcherTrainingCount++;
             }
@@ -221,8 +246,8 @@ namespace Deuteros.Code.Platform.Screens
         public void ProductionPlusButton_Pressed()
         {
             if (!GameCore.Earth.TrainingData.ProductionLocked &&
-                GameCore.Earth.TrainingData.ProductionTrainingCount < GameCore.Earth.TrainingData.ProductionTrainingMax &&
-                (GameCore.Earth.Factory.Builder == null ? 0 : GameCore.Earth.Factory.Builder.Count) + GameCore.Earth.TrainingData.ProductionTrainingCount < GameCore.Earth.TrainingData.ProductionMaxCount)
+                 GameCore.Earth.TrainingData.ProductionTrainingCount < GameCore.Earth.TrainingData.ProductionTrainingMax &&
+                 (GameCore.Earth.Factory.Builder == null ? 0 : GameCore.Earth.Factory.Builder.Count) + GameCore.Earth.TrainingData.ProductionTrainingCount < GameCore.Earth.TrainingData.ProductionMaxCount)
             {
                 GameCore.Earth.TrainingData.ProductionTrainingCount++;
             }
@@ -236,7 +261,7 @@ namespace Deuteros.Code.Platform.Screens
         public void MarinesMinusButton_Pressed()
         {
             if (!GameCore.Earth.TrainingData.MarinesLocked &&
-                GameCore.Earth.TrainingData.MarinesTrainingCount > 0)
+                 GameCore.Earth.TrainingData.MarinesTrainingCount > 0)
             {
                 GameCore.Earth.TrainingData.MarinesTrainingCount--;
             }
@@ -250,7 +275,7 @@ namespace Deuteros.Code.Platform.Screens
         public void MarinesPlusButton_Pressed()
         {
             if (!GameCore.Earth.TrainingData.MarinesLocked &&
-                GameCore.Earth.TrainingData.MarinesTrainingMax > GameCore.Earth.TrainingData.MarinesTrainingCount)
+                 GameCore.Earth.TrainingData.MarinesTrainingMax > GameCore.Earth.TrainingData.MarinesTrainingCount)
             {
                 GameCore.Earth.TrainingData.MarinesTrainingCount++;
             }
@@ -259,6 +284,17 @@ namespace Deuteros.Code.Platform.Screens
                 DoorButtonSound.Play();
 
             DrawData();
+        }
+
+        public void LightSwitchButton_Pressed()
+        {
+            DoorButtonSound.Play();
+            _isDimmed = !_isDimmed;
+            _modulateNode.Color = _isDimmed ? new Color(0.5f, 0.5f, 0.5f) : new Color(1, 1, 1);
+            // Compensate UI so text/buttons stay at full brightness
+            var ui = GetNode<Node2D>("Doors");
+            if (ui != null)
+                ui.Modulate = _isDimmed ? new Color(2f, 2f, 2f) : new Color(1f, 1f, 1f);
         }
     }
 }

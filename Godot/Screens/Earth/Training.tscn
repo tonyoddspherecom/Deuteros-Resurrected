@@ -181,6 +181,15 @@ horizontal_alignment = 2
 [node name="TrainingDoors" parent="Doors/Research" instance=ExtResource("6_t8wod")]
 position = Vector2(130, 96)
 
+[node name="LightSwitchButton" parent="Doors" instance=ExtResource("5_esdh4")]
+show_behind_parent = true
+offset_left = 117.0
+offset_top = 127.0
+offset_right = 125.0
+offset_bottom = 135.0
+keep_pressed_outside = true
+RepeatRate = 0.005
+
 [node name="SoundController" parent="." instance=ExtResource("3")]
 SoundToPlay = 1
 
