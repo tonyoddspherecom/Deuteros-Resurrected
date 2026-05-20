@@ -1481,8 +1481,6 @@ namespace Deuteros.Code
 						{
 							new Objects.Material(Enums.ItemTypes.hydrogen, 1),
 							new Objects.Material(Enums.ItemTypes.helium, 1),
-//debug data for testing
-							new Objects.Material(Enums.ItemTypes.ios_drone, 100)
 						}
 					),
 					MoonList = new List<int> { 1, 2, 3, 4, 6, 7, 8, 9, 10 },
@@ -2031,7 +2029,6 @@ namespace Deuteros.Code
 				{
 					IsMoon = false,
 					ParentStar = Enums.StellarBodies.proxima,
-					ActiveMethanoid = true,
 					Segment = true,
 					PlanetResources = new Objects.PlanetResource(new List<Objects.Material>()
 						{
@@ -2054,7 +2051,6 @@ namespace Deuteros.Code
 				{
 					IsMoon = false,
 					ParentStar = Enums.StellarBodies.proxima,
-					ActiveMethanoid = true,
 					PlanetResources = new Objects.PlanetResource(new List<Objects.Material>()
 						{
 							new Objects.Material(Enums.ItemTypes.iron, 1),
@@ -2106,7 +2102,6 @@ namespace Deuteros.Code
 				{
 					IsMoon = false,
 					ParentStar = Enums.StellarBodies.centauri,
-					ActiveMethanoid = true,
 					PlanetResources = new Objects.PlanetResource(new List<Objects.Material>()
 						{
 							new Objects.Material(Enums.ItemTypes.iron, 1),
@@ -2128,7 +2123,6 @@ namespace Deuteros.Code
 				{
 					IsMoon = false,
 					ParentStar = Enums.StellarBodies.centauri,
-					ActiveMethanoid = true,
 					PlanetResources = new Objects.PlanetResource(new List<Objects.Material>()
 						{
 							new Objects.Material(Enums.ItemTypes.iron, 1),
@@ -2179,7 +2173,6 @@ namespace Deuteros.Code
 				{
 					IsMoon = false,
 					ParentStar = Enums.StellarBodies.centauri,
-					ActiveMethanoid = true,
 					PlanetResources = new Objects.PlanetResource(new List<Objects.Material>()
 						{
 							new Objects.Material(Enums.ItemTypes.titanium, 1),
@@ -2202,7 +2195,6 @@ namespace Deuteros.Code
 					IsMoon = true,
 					MoonParentPlanetId = Enums.StellarBodies.cerberus,
 					ParentStar = Enums.StellarBodies.centauri,
-					ActiveMethanoid = true,
 					PlanetResources = new Objects.PlanetResource(new List<Objects.Material>()
 						{
 							new Objects.Material(Enums.ItemTypes.iron, 1),
@@ -2219,7 +2211,6 @@ namespace Deuteros.Code
 					IsMoon = true,
 					MoonParentPlanetId = Enums.StellarBodies.cerberus,
 					ParentStar = Enums.StellarBodies.centauri,
-					ActiveMethanoid = true,
 					Segment = true,
 					PlanetResources = new Objects.PlanetResource(new List<Objects.Material>()
 						{
@@ -2264,7 +2255,6 @@ namespace Deuteros.Code
 				{
 					IsMoon = false,
 					ParentStar = Enums.StellarBodies.centauri,
-					ActiveMethanoid = true,
 					PlanetResources = new Objects.PlanetResource(new List<Objects.Material>()
 						{
 							new Objects.Material(Enums.ItemTypes.copper, 1),
@@ -2283,7 +2273,6 @@ namespace Deuteros.Code
 					IsMoon = true,
 					MoonParentPlanetId = Enums.StellarBodies.creon,
 					ParentStar = Enums.StellarBodies.centauri,
-					ActiveMethanoid = true,
 					PlanetResources = new Objects.PlanetResource(new List<Objects.Material>()
 						{
 							new Objects.Material(Enums.ItemTypes.iron, 1),
@@ -2299,7 +2288,6 @@ namespace Deuteros.Code
 					IsMoon = true,
 					MoonParentPlanetId = Enums.StellarBodies.creon,
 					ParentStar = Enums.StellarBodies.centauri,
-					ActiveMethanoid = true,
 					PlanetResources = new Objects.PlanetResource(new List<Objects.Material>()
 						{
 							new Objects.Material(Enums.ItemTypes.copper, 1),
@@ -2315,7 +2303,6 @@ namespace Deuteros.Code
 				{
 					IsMoon = false,
 					ParentStar = Enums.StellarBodies.barnard,
-					ActiveMethanoid = true,
 					PlanetResources = new Objects.PlanetResource(new List<Objects.Material>()
 						{
 							new Objects.Material(Enums.ItemTypes.copper, 1),
@@ -2387,7 +2374,6 @@ namespace Deuteros.Code
 					IsMoon = true,
 					MoonParentPlanetId = Enums.StellarBodies.thebes,
 					ParentStar = Enums.StellarBodies.barnard,
-					ActiveMethanoid = true,
 					PlanetResources = new Objects.PlanetResource(new List<Objects.Material>()
 						{
 							new Objects.Material(Enums.ItemTypes.carbon, 1),
@@ -2407,7 +2393,6 @@ namespace Deuteros.Code
 					IsMoon = true,
 					MoonParentPlanetId = Enums.StellarBodies.thebes,
 					ParentStar = Enums.StellarBodies.barnard,
-					ActiveMethanoid = true,
 					PlanetResources = new Objects.PlanetResource(new List<Objects.Material>()
 						{
 							new Objects.Material(Enums.ItemTypes.titanium, 1),
@@ -2425,7 +2410,6 @@ namespace Deuteros.Code
 					IsMoon = true,
 					MoonParentPlanetId = Enums.StellarBodies.thebes,
 					ParentStar = Enums.StellarBodies.barnard,
-					ActiveMethanoid = true,
 					PlanetResources = new Objects.PlanetResource(new List<Objects.Material>()
 						{
 							new Objects.Material(Enums.ItemTypes.iron, 1),
@@ -2459,7 +2443,6 @@ namespace Deuteros.Code
 					IsMoon = true,
 					MoonParentPlanetId = Enums.StellarBodies.thebes,
 					ParentStar = Enums.StellarBodies.barnard,
-					ActiveMethanoid = true,
 					PlanetResources = new Objects.PlanetResource(new List<Objects.Material>()
 						{
 							new Objects.Material(Enums.ItemTypes.iron, 1),
@@ -2508,7 +2491,6 @@ namespace Deuteros.Code
 					IsMoon = true,
 					MoonParentPlanetId = Enums.StellarBodies.thebes,
 					ParentStar = Enums.StellarBodies.barnard,
-					ActiveMethanoid = true,
 					PlanetResources = new Objects.PlanetResource(new List<Objects.Material>()
 						{
 							new Objects.Material(Enums.ItemTypes.iron, 1),
@@ -2589,7 +2571,6 @@ namespace Deuteros.Code
 					IsMoon = true,
 					MoonParentPlanetId = Enums.StellarBodies.jericho,
 					ParentStar = Enums.StellarBodies.barnard,
-					ActiveMethanoid = true,
 					Segment = true,
 					PlanetResources = new Objects.PlanetResource(new List<Objects.Material>()
 						{
@@ -2638,7 +2619,6 @@ namespace Deuteros.Code
 				{
 					IsMoon = false,
 					ParentStar = Enums.StellarBodies.barnard,
-					ActiveMethanoid = true,
 					PlanetResources = new Objects.PlanetResource(new List<Objects.Material>()
 						{
 							new Objects.Material(Enums.ItemTypes.deuterium, 1),
@@ -2657,7 +2637,6 @@ namespace Deuteros.Code
 					IsMoon = true,
 					MoonParentPlanetId = Enums.StellarBodies.crete,
 					ParentStar = Enums.StellarBodies.barnard,
-					ActiveMethanoid = true,
 					PlanetResources = new Objects.PlanetResource(new List<Objects.Material>()
 						{
 							new Objects.Material(Enums.ItemTypes.helium, 1),
@@ -2673,7 +2652,6 @@ namespace Deuteros.Code
 					IsMoon = true,
 					MoonParentPlanetId = Enums.StellarBodies.crete,
 					ParentStar = Enums.StellarBodies.barnard,
-					ActiveMethanoid = true,
 					PlanetResources = new Objects.PlanetResource(new List<Objects.Material>()
 						{
 							new Objects.Material(Enums.ItemTypes.iron, 1),
@@ -2689,7 +2667,6 @@ namespace Deuteros.Code
 					IsMoon = true,
 					MoonParentPlanetId = Enums.StellarBodies.crete,
 					ParentStar = Enums.StellarBodies.barnard,
-					ActiveMethanoid = true,
 					PlanetResources = new Objects.PlanetResource(new List<Objects.Material>()
 						{
 							new Objects.Material(Enums.ItemTypes.copper, 1),
@@ -2705,7 +2682,6 @@ namespace Deuteros.Code
 					IsMoon = true,
 					MoonParentPlanetId = Enums.StellarBodies.crete,
 					ParentStar = Enums.StellarBodies.barnard,
-					ActiveMethanoid = true,
 					PlanetResources = new Objects.PlanetResource(new List<Objects.Material>()
 						{
 							new Objects.Material(Enums.ItemTypes.iron, 1),
@@ -2721,7 +2697,6 @@ namespace Deuteros.Code
 					IsMoon = true,
 					MoonParentPlanetId = Enums.StellarBodies.crete,
 					ParentStar = Enums.StellarBodies.barnard,
-					ActiveMethanoid = true,
 					PlanetResources = new Objects.PlanetResource(new List<Objects.Material>()
 						{
 							new Objects.Material(Enums.ItemTypes.aluminium, 1),
@@ -2738,7 +2713,6 @@ namespace Deuteros.Code
 					IsMoon = true,
 					MoonParentPlanetId = Enums.StellarBodies.crete,
 					ParentStar = Enums.StellarBodies.barnard,
-					ActiveMethanoid = true,
 					PlanetResources = new Objects.PlanetResource(new List<Objects.Material>()
 						{
 							new Objects.Material(Enums.ItemTypes.iron, 1),
@@ -2753,7 +2727,6 @@ namespace Deuteros.Code
 				{
 					IsMoon = false,
 					ParentStar = Enums.StellarBodies.barnard,
-					ActiveMethanoid = true,
 					PlanetResources = new Objects.PlanetResource(new List<Objects.Material>()
 						{
 							new Objects.Material(Enums.ItemTypes.iron, 1),
@@ -2776,23 +2749,21 @@ namespace Deuteros.Code
 					IsMoon = true,
 					MoonParentPlanetId = Enums.StellarBodies.mari,
 					ParentStar = Enums.StellarBodies.barnard,
-					ActiveMethanoid = true,
 					PlanetResources = new Objects.PlanetResource(new List<Objects.Material>()
 						{
 							new Objects.Material(Enums.ItemTypes.aluminium, 1),
 							new Objects.Material(Enums.ItemTypes.helium, 1),
 							new Objects.Material(Enums.ItemTypes.silver, 1),
 							new Objects.Material(Enums.ItemTypes.gold, 1),
-						}
-					)
-				});
+						})
+					
+                });
 
 
 				StaticGameData.Planets.Add(Enums.StellarBodies.nero, new Objects.Planet(Enums.StellarBodies.nero, 0)
 				{
 					IsMoon = false,
 					ParentStar = Enums.StellarBodies.lalande,
-					ActiveMethanoid = true,
 					PlanetResources = new Objects.PlanetResource(new List<Objects.Material>()
 						{
 							new Objects.Material(Enums.ItemTypes.iron, 1),
@@ -2832,7 +2803,6 @@ namespace Deuteros.Code
 					IsMoon = true,
 					MoonParentPlanetId = Enums.StellarBodies.julius,
 					ParentStar = Enums.StellarBodies.lalande,
-					ActiveMethanoid = true,
 					PlanetResources = new Objects.PlanetResource(new List<Objects.Material>()
 						{
 							new Objects.Material(Enums.ItemTypes.iron, 1),
@@ -2848,7 +2818,6 @@ namespace Deuteros.Code
 					IsMoon = true,
 					MoonParentPlanetId = Enums.StellarBodies.julius,
 					ParentStar = Enums.StellarBodies.lalande,
-					ActiveMethanoid = true,
 					PlanetResources = new Objects.PlanetResource(new List<Objects.Material>()
 						{
 							new Objects.Material(Enums.ItemTypes.iron, 1),
@@ -2864,7 +2833,6 @@ namespace Deuteros.Code
 					IsMoon = true,
 					MoonParentPlanetId = Enums.StellarBodies.julius,
 					ParentStar = Enums.StellarBodies.lalande,
-					ActiveMethanoid = true,
 					PlanetResources = new Objects.PlanetResource(new List<Objects.Material>()
 						{
 							new Objects.Material(Enums.ItemTypes.iron, 1),
@@ -2881,7 +2849,6 @@ namespace Deuteros.Code
 					IsMoon = true,
 					MoonParentPlanetId = Enums.StellarBodies.julius,
 					ParentStar = Enums.StellarBodies.lalande,
-					ActiveMethanoid = true,
 					Segment = true,
 					PlanetResources = new Objects.PlanetResource(new List<Objects.Material>()
 						{
@@ -2896,7 +2863,6 @@ namespace Deuteros.Code
 				{
 					IsMoon = false,
 					ParentStar = Enums.StellarBodies.sirius,
-					ActiveMethanoid = true,
 					Segment = true,
 					PlanetResources = new Objects.PlanetResource(new List<Objects.Material>()
 						{
@@ -2918,7 +2884,6 @@ namespace Deuteros.Code
 				{
 					IsMoon = false,
 					ParentStar = Enums.StellarBodies.sirius,
-					ActiveMethanoid = true,
 					PlanetResources = new Objects.PlanetResource(new List<Objects.Material>()
 						{
 							new Objects.Material(Enums.ItemTypes.titanium, 1),
@@ -2957,7 +2922,6 @@ namespace Deuteros.Code
 				{
 					IsMoon = false,
 					ParentStar = Enums.StellarBodies.cygni,
-					ActiveMethanoid = true,
 					PlanetResources = new Objects.PlanetResource(new List<Objects.Material>()
 						{
 							new Objects.Material(Enums.ItemTypes.iron, 1),
@@ -2994,7 +2958,6 @@ namespace Deuteros.Code
 					IsMoon = true,
 					MoonParentPlanetId = Enums.StellarBodies.burah,
 					ParentStar = Enums.StellarBodies.cygni,
-					ActiveMethanoid = true,
 					PlanetResources = new Objects.PlanetResource(new List<Objects.Material>()
 						{
 							new Objects.Material(Enums.ItemTypes.deuterium, 1),
@@ -3010,7 +2973,6 @@ namespace Deuteros.Code
 					IsMoon = true,
 					MoonParentPlanetId = Enums.StellarBodies.burah,
 					ParentStar = Enums.StellarBodies.cygni,
-					ActiveMethanoid = true,
 					PlanetResources = new Objects.PlanetResource(new List<Objects.Material>()
 						{
 							new Objects.Material(Enums.ItemTypes.iron, 1),
@@ -3028,7 +2990,6 @@ namespace Deuteros.Code
 				{
 					IsMoon = false,
 					ParentStar = Enums.StellarBodies.cygni,
-					ActiveMethanoid = true,
 					PlanetResources = new Objects.PlanetResource(new List<Objects.Material>()
 						{
 							new Objects.Material(Enums.ItemTypes.iron, 1),
@@ -3050,8 +3011,7 @@ namespace Deuteros.Code
 				{
 					IsMoon = true,
 					MoonParentPlanetId = Enums.StellarBodies.sulfurum,
-					ParentStar = Enums.StellarBodies.the_sun,
-					ActiveMethanoid = true,
+					ParentStar = Enums.StellarBodies.cygni,
 					PlanetResources = new Objects.PlanetResource(new List<Objects.Material>()
 						{
 							new Objects.Material(Enums.ItemTypes.iron, 1),
@@ -3086,7 +3046,6 @@ namespace Deuteros.Code
 					IsMoon = true,
 					MoonParentPlanetId = Enums.StellarBodies.sulfurum,
 					ParentStar = Enums.StellarBodies.cygni,
-					ActiveMethanoid = true,
 					PlanetResources = new Objects.PlanetResource(new List<Objects.Material>()
 						{
 							new Objects.Material(Enums.ItemTypes.iron, 1),
@@ -3123,7 +3082,6 @@ namespace Deuteros.Code
 					IsMoon = true,
 					MoonParentPlanetId = Enums.StellarBodies.titanes,
 					ParentStar = Enums.StellarBodies.cygni,
-					ActiveMethanoid = true,
 					PlanetResources = new Objects.PlanetResource(new List<Objects.Material>()
 						{
 							new Objects.Material(Enums.ItemTypes.iron, 1),
@@ -3156,7 +3114,6 @@ namespace Deuteros.Code
 					IsMoon = true,
 					MoonParentPlanetId = Enums.StellarBodies.titanes,
 					ParentStar = Enums.StellarBodies.cygni,
-					ActiveMethanoid = true,
 					PlanetResources = new Objects.PlanetResource(new List<Objects.Material>()
 						{
 							new Objects.Material(Enums.ItemTypes.titanium, 1),
@@ -3268,7 +3225,6 @@ namespace Deuteros.Code
 					IsMoon = true,
 					MoonParentPlanetId = Enums.StellarBodies.zargun,
 					ParentStar = Enums.StellarBodies.cygni,
-					ActiveMethanoid = true,
 					PlanetResources = new Objects.PlanetResource(new List<Objects.Material>()
 						{
 							new Objects.Material(Enums.ItemTypes.iron, 1),
@@ -3285,7 +3241,6 @@ namespace Deuteros.Code
 					IsMoon = true,
 					MoonParentPlanetId = Enums.StellarBodies.zargun,
 					ParentStar = Enums.StellarBodies.cygni,
-					ActiveMethanoid = true,
 					PlanetResources = new Objects.PlanetResource(new List<Objects.Material>()
 						{
 							new Objects.Material(Enums.ItemTypes.iron, 1),
@@ -3409,7 +3364,6 @@ namespace Deuteros.Code
 					IsMoon = true,
 					MoonParentPlanetId = Enums.StellarBodies.osme,
 					ParentStar = Enums.StellarBodies.cygni,
-					ActiveMethanoid = true,
 					PlanetResources = new Objects.PlanetResource(new List<Objects.Material>()
 						{
 							new Objects.Material(Enums.ItemTypes.iron, 1),
@@ -3425,7 +3379,6 @@ namespace Deuteros.Code
 					IsMoon = true,
 					MoonParentPlanetId = Enums.StellarBodies.osme,
 					ParentStar = Enums.StellarBodies.cygni,
-					ActiveMethanoid = true,
 					PlanetResources = new Objects.PlanetResource(new List<Objects.Material>()
 						{
 							new Objects.Material(Enums.ItemTypes.iron, 1),
@@ -3440,7 +3393,6 @@ namespace Deuteros.Code
 				{
 					IsMoon = false,
 					ParentStar = Enums.StellarBodies.cygni,
-					ActiveMethanoid = true,
 					PlanetResources = new Objects.PlanetResource(new List<Objects.Material>()
 						{
 							new Objects.Material(Enums.ItemTypes.iron, 1),
@@ -3459,7 +3411,6 @@ namespace Deuteros.Code
 					IsMoon = true,
 					MoonParentPlanetId = Enums.StellarBodies.radius,
 					ParentStar = Enums.StellarBodies.cygni,
-					ActiveMethanoid = true,
 					PlanetResources = new Objects.PlanetResource(new List<Objects.Material>()
 						{
 							new Objects.Material(Enums.ItemTypes.iron, 1),
@@ -3475,7 +3426,6 @@ namespace Deuteros.Code
 					IsMoon = true,
 					MoonParentPlanetId = Enums.StellarBodies.radius,
 					ParentStar = Enums.StellarBodies.cygni,
-					ActiveMethanoid = true,
 					PlanetResources = new Objects.PlanetResource(new List<Objects.Material>()
 						{
 							new Objects.Material(Enums.ItemTypes.titanium, 1),
@@ -3491,7 +3441,6 @@ namespace Deuteros.Code
 					IsMoon = true,
 					MoonParentPlanetId = Enums.StellarBodies.radius,
 					ParentStar = Enums.StellarBodies.cygni,
-					ActiveMethanoid = true,
 					PlanetResources = new Objects.PlanetResource(new List<Objects.Material>()
 						{
 							new Objects.Material(Enums.ItemTypes.titanium, 1),
@@ -3507,7 +3456,6 @@ namespace Deuteros.Code
 				{
 					IsMoon = false,
 					ParentStar = Enums.StellarBodies.procyon,
-					ActiveMethanoid = true,
 					PlanetResources = new Objects.PlanetResource(new List<Objects.Material>()
 						{
 							new Objects.Material(Enums.ItemTypes.iron, 1),
@@ -3529,7 +3477,6 @@ namespace Deuteros.Code
 				{
 					IsMoon = false,
 					ParentStar = Enums.StellarBodies.procyon,
-					ActiveMethanoid = true,
 					PlanetResources = new Objects.PlanetResource(new List<Objects.Material>()
 						{
 							new Objects.Material(Enums.ItemTypes.iron, 1),
@@ -3548,7 +3495,6 @@ namespace Deuteros.Code
 					IsMoon = true,
 					MoonParentPlanetId = Enums.StellarBodies.cainozoic,
 					ParentStar = Enums.StellarBodies.procyon,
-					ActiveMethanoid = true,
 					PlanetResources = new Objects.PlanetResource(new List<Objects.Material>()
 						{
 							new Objects.Material(Enums.ItemTypes.iron, 1),
@@ -3564,7 +3510,6 @@ namespace Deuteros.Code
 					IsMoon = true,
 					MoonParentPlanetId = Enums.StellarBodies.cainozoic,
 					ParentStar = Enums.StellarBodies.procyon,
-					ActiveMethanoid = true,
 					PlanetResources = new Objects.PlanetResource(new List<Objects.Material>()
 						{
 							new Objects.Material(Enums.ItemTypes.titanium, 1),
@@ -3580,7 +3525,6 @@ namespace Deuteros.Code
 					IsMoon = true,
 					MoonParentPlanetId = Enums.StellarBodies.cainozoic,
 					ParentStar = Enums.StellarBodies.procyon,
-					ActiveMethanoid = true,
 					PlanetResources = new Objects.PlanetResource(new List<Objects.Material>()
 						{
 							new Objects.Material(Enums.ItemTypes.iron, 1),
@@ -3596,7 +3540,6 @@ namespace Deuteros.Code
 					IsMoon = true,
 					MoonParentPlanetId = Enums.StellarBodies.cainozoic,
 					ParentStar = Enums.StellarBodies.procyon,
-					ActiveMethanoid = true,
 					PlanetResources = new Objects.PlanetResource(new List<Objects.Material>()
 						{
 							new Objects.Material(Enums.ItemTypes.titanium, 1),
@@ -3612,7 +3555,6 @@ namespace Deuteros.Code
 					IsMoon = true,
 					MoonParentPlanetId = Enums.StellarBodies.cainozoic,
 					ParentStar = Enums.StellarBodies.procyon,
-					ActiveMethanoid = true,
 					PlanetResources = new Objects.PlanetResource(new List<Objects.Material>()
 						{
 							new Objects.Material(Enums.ItemTypes.iron, 1),
@@ -3632,7 +3574,6 @@ namespace Deuteros.Code
 					IsMoon = true,
 					MoonParentPlanetId = Enums.StellarBodies.cainozoic,
 					ParentStar = Enums.StellarBodies.procyon,
-					ActiveMethanoid = true,
 					Segment = true,
 					PlanetResources = new Objects.PlanetResource(new List<Objects.Material>()
 						{
@@ -3649,7 +3590,6 @@ namespace Deuteros.Code
 				{
 					IsMoon = false,
 					ParentStar = Enums.StellarBodies.procyon,
-					ActiveMethanoid = true,
 					PlanetResources = new Objects.PlanetResource(new List<Objects.Material>()
 						{
 							new Objects.Material(Enums.ItemTypes.aluminium, 1),
@@ -3668,7 +3608,6 @@ namespace Deuteros.Code
 					IsMoon = true,
 					MoonParentPlanetId = Enums.StellarBodies.paleozoic,
 					ParentStar = Enums.StellarBodies.procyon,
-					ActiveMethanoid = true,
 					PlanetResources = new Objects.PlanetResource(new List<Objects.Material>()
 						{
 							new Objects.Material(Enums.ItemTypes.carbon, 1),
@@ -3683,7 +3622,6 @@ namespace Deuteros.Code
 				{
 					IsMoon = false,
 					ParentStar = Enums.StellarBodies.tau_ceti,
-					ActiveMethanoid = true,
 					Segment = true,
 					PlanetResources = new Objects.PlanetResource(new List<Objects.Material>()
 						{
@@ -3705,7 +3643,6 @@ namespace Deuteros.Code
 				{
 					IsMoon = false,
 					ParentStar = Enums.StellarBodies.tau_ceti,
-					ActiveMethanoid = true,
 					PlanetResources = new Objects.PlanetResource(new List<Objects.Material>()
 						{
 							new Objects.Material(Enums.ItemTypes.iron, 1),
@@ -3757,7 +3694,6 @@ namespace Deuteros.Code
 					IsMoon = true,
 					MoonParentPlanetId = Enums.StellarBodies.gamma,
 					ParentStar = Enums.StellarBodies.tau_ceti,
-					ActiveMethanoid = true,
 					PlanetResources = new Objects.PlanetResource(new List<Objects.Material>()
 						{
 							new Objects.Material(Enums.ItemTypes.iron, 1),
@@ -3777,7 +3713,6 @@ namespace Deuteros.Code
 					IsMoon = true,
 					MoonParentPlanetId = Enums.StellarBodies.gamma,
 					ParentStar = Enums.StellarBodies.tau_ceti,
-					ActiveMethanoid = true,
 					PlanetResources = new Objects.PlanetResource(new List<Objects.Material>()
 						{
 							new Objects.Material(Enums.ItemTypes.iron, 1),
@@ -3794,7 +3729,6 @@ namespace Deuteros.Code
 					IsMoon = true,
 					MoonParentPlanetId = Enums.StellarBodies.gamma,
 					ParentStar = Enums.StellarBodies.tau_ceti,
-					ActiveMethanoid = true,
 					PlanetResources = new Objects.PlanetResource(new List<Objects.Material>()
 						{
 							new (Enums.ItemTypes.iron, 1),
@@ -3875,7 +3809,6 @@ namespace Deuteros.Code
 					IsMoon = true,
 					MoonParentPlanetId = Enums.StellarBodies.epsilon,
 					ParentStar = Enums.StellarBodies.tau_ceti,
-					ActiveMethanoid = true,
 					PlanetResources = new Objects.PlanetResource(new List<Objects.Material>()
 						{
 							new Objects.Material(Enums.ItemTypes.iron, 1),
@@ -3891,7 +3824,6 @@ namespace Deuteros.Code
 					IsMoon = true,
 					MoonParentPlanetId = Enums.StellarBodies.epsilon,
 					ParentStar = Enums.StellarBodies.tau_ceti,
-					ActiveMethanoid = true,
 					PlanetResources = new Objects.PlanetResource(new List<Objects.Material>()
 						{
 							new Objects.Material(Enums.ItemTypes.iron, 1),
@@ -3907,7 +3839,6 @@ namespace Deuteros.Code
 					IsMoon = true,
 					MoonParentPlanetId = Enums.StellarBodies.epsilon,
 					ParentStar = Enums.StellarBodies.tau_ceti,
-					ActiveMethanoid = true,
 					PlanetResources = new Objects.PlanetResource(new List<Objects.Material>()
 						{
 							new Objects.Material(Enums.ItemTypes.iron, 1),
@@ -3922,7 +3853,6 @@ namespace Deuteros.Code
 				{
 					IsMoon = false,
 					ParentStar = Enums.StellarBodies.tau_ceti,
-					ActiveMethanoid = true,
 					PlanetResources = new Objects.PlanetResource(new List<Objects.Material>()
 						{
 							new Objects.Material(Enums.ItemTypes.iron, 1),
@@ -3941,7 +3871,6 @@ namespace Deuteros.Code
 					IsMoon = true,
 					MoonParentPlanetId = Enums.StellarBodies.zeta,
 					ParentStar = Enums.StellarBodies.tau_ceti,
-					ActiveMethanoid = true,
 					PlanetResources = new Objects.PlanetResource(new List<Objects.Material>()
 						{
 							new Objects.Material(Enums.ItemTypes.iron, 1),
@@ -3957,7 +3886,6 @@ namespace Deuteros.Code
 					IsMoon = true,
 					MoonParentPlanetId = Enums.StellarBodies.zeta,
 					ParentStar = Enums.StellarBodies.tau_ceti,
-					ActiveMethanoid = true,
 					PlanetResources = new Objects.PlanetResource(new List<Objects.Material>()
 						{
 							new Objects.Material(Enums.ItemTypes.iron, 1),
@@ -3973,7 +3901,6 @@ namespace Deuteros.Code
 					IsMoon = true,
 					MoonParentPlanetId = Enums.StellarBodies.zeta,
 					ParentStar = Enums.StellarBodies.tau_ceti,
-					ActiveMethanoid = true,
 					PlanetResources = new Objects.PlanetResource(new List<Objects.Material>()
 						{
 							new Objects.Material(Enums.ItemTypes.iron, 1),
@@ -3993,7 +3920,6 @@ namespace Deuteros.Code
 					IsMoon = true,
 					MoonParentPlanetId = Enums.StellarBodies.zeta,
 					ParentStar = Enums.StellarBodies.tau_ceti,
-					ActiveMethanoid = true,
 					PlanetResources = new Objects.PlanetResource(new List<Objects.Material>()
 						{
 							new Objects.Material(Enums.ItemTypes.iron, 1),
@@ -4011,7 +3937,6 @@ namespace Deuteros.Code
 					IsMoon = true,
 					MoonParentPlanetId = Enums.StellarBodies.zeta,
 					ParentStar = Enums.StellarBodies.tau_ceti,
-					ActiveMethanoid = true,
 					PlanetResources = new Objects.PlanetResource(new List<Objects.Material>()
 						{
 							new Objects.Material(Enums.ItemTypes.iron, 1),
@@ -4029,7 +3954,6 @@ namespace Deuteros.Code
 					IsMoon = true,
 					MoonParentPlanetId = Enums.StellarBodies.zeta,
 					ParentStar = Enums.StellarBodies.tau_ceti,
-					ActiveMethanoid = true,
 					PlanetResources = new Objects.PlanetResource(new List<Objects.Material>()
 						{
 							new Objects.Material(Enums.ItemTypes.iron, 1),
@@ -4045,7 +3969,6 @@ namespace Deuteros.Code
 					IsMoon = true,
 					MoonParentPlanetId = Enums.StellarBodies.zeta,
 					ParentStar = Enums.StellarBodies.tau_ceti,
-					ActiveMethanoid = true,
 					PlanetResources = new Objects.PlanetResource(new List<Objects.Material>()
 						{
 							new Objects.Material(Enums.ItemTypes.iron, 1),
@@ -4056,8 +3979,35 @@ namespace Deuteros.Code
 					)
 				});
 
-				//set up all methanoid owned planets
-				foreach (IPlanet p in StaticGameData.Planets.Values)
+				Dictionary<StellarBodies, int> starCounts = new Dictionary<StellarBodies, int>();
+				starCounts.Add(StellarBodies.proxima, 2);
+                starCounts.Add(StellarBodies.centauri, 8);
+                starCounts.Add(StellarBodies.barnard, 16);
+                starCounts.Add(StellarBodies.lalande, 5);
+                starCounts.Add(StellarBodies.sirius, 2);
+                starCounts.Add(StellarBodies.cygni, 16);
+                starCounts.Add(StellarBodies.procyon, 10);
+                starCounts.Add(StellarBodies.tau_ceti, 16);
+
+				//setup random methanoid locations on all stars
+				//except the sun
+                foreach (var s in StaticGameData.Stars.Values)
+				{
+					if (s.StarId != StellarBodies.the_sun)
+					{
+						var planets = StaticGameData.Planets.Values.Where(p => p.ParentStar == s.StarId).ToList();
+						for (int i = 0; i<starCounts[s.StarId]; i++)
+						{
+							var p = planets[Random.Shared.Next(planets.Count - 1)];
+							p.ActiveMethanoid = true;
+							planets.Remove(p);
+						}
+
+                    }
+				}
+
+                //set up all methanoid owned planets
+                foreach (IPlanet p in StaticGameData.Planets.Values)
 				{
 					if (p.ActiveMethanoid)
 					{

@@ -307,22 +307,21 @@ namespace Deuteros.Code.Platform.Screens
 							GameCore.SingletonInstance.GameData.ActiveSaveFile.AtWar = true;
 							GameCore.SingletonInstance.GameData.ActiveSaveFile.WarDeclaredDay = GameCore.SingletonInstance.GameData.ActiveSaveFile.CurrentDay;
 
-							//create enemy fleet used to attack the player
-							var enemyFleet = new IOS();
-							enemyFleet.MethanoidOwned = true;
-							enemyFleet.PlanetLocation = StellarBodies.none;
-							enemyFleet.Pilot = new Staff();
-							//make pilot an admiral
-							enemyFleet.Pilot.ActionsTaken = 50;
+							//create enemy fleets used to attack the player
+							foreach (var star in GameCore.SingletonInstance.GameData.ActiveSaveFile.BaseGameData.Stars.Keys)
+							{
+								var enemyFleet = new IOS();
+								enemyFleet.MethanoidOwned = true;
+								enemyFleet.PlanetLocation = StellarBodies.none;
+								enemyFleet.StarLocation = star;
+								enemyFleet.Pilot = new Staff();
 
-							GameCore.SingletonInstance.GameData.ActiveSaveFile.Ships.Add(enemyFleet);
+								//make pilot an admiral
+								enemyFleet.Pilot.ActionsTaken = 50;
+                                GameCore.SingletonInstance.GameData.ActiveSaveFile.Ships.Add(enemyFleet);
+                            }
 
-							//debug - give some drones to jupiter
-							GameCore.SingletonInstance.GameData.ActiveSaveFile.BaseGameData.Planets[StellarBodies.jupiter].PlanetResources.Stores[ItemTypes.ios_drone] = 100;
-
-
-
-						}
+                        }
 
 						UpdateState();
 					}
