@@ -46,6 +46,7 @@ namespace Deuteros.Code
 			newGameSave.CurrentDay = 0;
             newGameSave.AtWar = false;
             newGameSave.WarDeclaredDay = 0;
+			newGameSave.EnemyBuildDay = 0;
             newGameSave.GameConfig.ShuttleRefuelThreshold = 50;
 			newGameSave.GameConfig.IOSRefuelThreshold = 200;
 			newGameSave.NextPersonIndex = Random.Shared.Next(StaticGameData.PersonNames.Count() + 1);
