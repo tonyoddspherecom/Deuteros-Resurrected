@@ -58,6 +58,9 @@ namespace Deuteros.Code.Platform.Screens
 		ModuleTextFrame ModuleTextFrame { get; set; }
 		ACC ACCScreen { get; set; }
 		Grapple GrappleScreen { get; set; }
+		Battle BattleScreen { get; set; }
+		FleetTransfers FleetTransfers { get; set; }
+		//MethanoidTextFrame MethanoidTextFrame { get; set; }
 
 		public override void _Ready()
 		{
@@ -183,9 +186,8 @@ namespace Deuteros.Code.Platform.Screens
 				}
 				else if (Ship.ShipType != Ship_Types.Shuttle)
 				{
-					if (CurrentPlanet.ActiveMethanoid && !Ship.Modules.Any<ShipModule>(m => m.ItemStored == ItemTypes.commspod))
+					if(CurrentPlanet.ActiveMethanoid && !Ship.Modules.Any<ShipModule>(m => m.ItemStored == ItemTypes.commspod))
 					{
-
 
 						if (Ship.Modules.Any<ShipModule>(m => m.ItemStored == ItemTypes.grapple))
 							await ShowModuleTextFrame(GameCore.SingletonInstance.GameData.ActiveSaveFile.BaseGameData.ModuleFrameTexts[Enums.ModuleFrameText.Methanoid_Intro_With_Grapple], new List<string>(), (modulePressed + 1));
@@ -212,9 +214,72 @@ namespace Deuteros.Code.Platform.Screens
 			}
 			else if (Ship.ShipState != Ship_States.Docked)
 			{
-				if (Ship.Modules[modulePressed].ModuleType == Module_Types.Tool)
+				if ((Ship.ShipState == Ship_States.UnDocked && Ship.ShipType != Ship_Types.Shuttle && ((InterStellarShip)Ship).DFCC))
 				{
-					if (Ship.ShipType == Ship_Types.Shuttle && Ship.ShipState == Ship_States.UnDocked && !((Shuttle)Ship).OnGround && Ship.Modules[modulePressed].ItemStored == ItemTypes.of_frame && CurrentPlanet.Station.Built == false && Ship.Pilot != null)
+					if (GameCore.SingletonInstance.GameData.ActiveSaveFile.AtWar &&
+						(GameCore.SingletonInstance.GameData.ActiveSaveFile.BaseGameData.Planets[Ship.PlanetLocation].ActiveMethanoid ||
+							GameCore.SingletonInstance.GameData.ActiveSaveFile.Ships.Exists(s => s.PlanetLocation == Ship.PlanetLocation && s.ShipType != Ship_Types.Shuttle && ((InterStellarShip)s).MethanoidOwned))
+						)
+					{
+
+						InterStellarShip enemyShip;
+						if (GameCore.SingletonInstance.GameData.ActiveSaveFile.BaseGameData.Planets[Ship.PlanetLocation].ActiveMethanoid)
+						{
+							enemyShip = new IOS();
+							//pull upto 200 drones from the planet store
+							enemyShip.DroneCount = Math.Min(200,GameCore.SingletonInstance.GameData.ActiveSaveFile.BaseGameData.Planets[Ship.PlanetLocation].PlanetResources.Stores[ItemTypes.ios_drone]);
+							GameCore.SingletonInstance.GameData.ActiveSaveFile.BaseGameData.Planets[Ship.PlanetLocation].PlanetResources.Stores[ItemTypes.ios_drone] -= enemyShip.DroneCount;
+						}
+						else
+						{
+							enemyShip = (InterStellarShip)GameCore.SingletonInstance.GameData.ActiveSaveFile.Ships.FirstOrDefault(s => s.PlanetLocation == Ship.PlanetLocation && s.ShipType != Ship_Types.Shuttle && ((InterStellarShip)s).MethanoidOwned);
+						}
+
+						await ShowBattleFrame((InterStellarShip)Ship, enemyShip);
+
+						if (GameCore.SingletonInstance.GameData.ActiveSaveFile.BaseGameData.Planets[Ship.PlanetLocation].ActiveMethanoid)
+						{
+							//move remaining drones back to store
+							GameCore.SingletonInstance.GameData.ActiveSaveFile.BaseGameData.Planets[Ship.PlanetLocation].PlanetResources.Stores[ItemTypes.ios_drone] += enemyShip.DroneCount;
+						}
+                        else
+                        {
+                            if (enemyShip.DroneCount == 0)
+							{
+								//enemy Ship destroyed
+								GameCore.SingletonInstance.GameData.ActiveSaveFile.Ships.Remove(enemyShip);
+							}
+						}
+
+						if (((InterStellarShip)Ship).DroneCount == 0)
+						{
+							//player Ship destroyed
+							GameCore.SingletonInstance.GameData.ActiveSaveFile.Ships.Remove(Ship);
+
+							//todo show ship destroyed page
+						}
+						else
+						{
+							//all ships at this location are no longer under attack
+                            foreach (Ship ship in GameCore.SingletonInstance.GameData.ActiveSaveFile.Ships.Where(s => s.PlanetLocation == Ship.PlanetLocation && s.ShipType!=Ship_Types.Shuttle))
+							{
+								((InterStellarShip)ship).AttackedCount = 0;
+							}
+						}
+							
+
+						UpdateState();
+					}
+                    else if (!GameCore.SingletonInstance.GameData.ActiveSaveFile.BaseGameData.Planets[Ship.PlanetLocation].ActiveMethanoid)
+                    {
+						ShowDroneTrasferFrame((InterStellarShip)Ship);
+						UpdateState();
+					}
+				}
+				else if (Ship.Modules[modulePressed].ModuleType == Module_Types.Tool)
+				{
+
+					if ((Ship.ShipType != Ship_Types.Shuttle || (Ship.ShipType == Ship_Types.Shuttle && !((Shuttle)Ship).OnGround)) && Ship.ShipState == Ship_States.UnDocked  && Ship.Modules[modulePressed].ItemStored == ItemTypes.of_frame && CurrentPlanet.Station.Built == false && Ship.Pilot != null)
 					{
 						if (Ship.Pilot != null) Ship.Pilot.ActionsTaken++;
 
@@ -233,6 +298,32 @@ namespace Deuteros.Code.Platform.Screens
 
 						GameCore.SingletonInstance.TriggerStationPiecePlaced(CurrentPlanet.PlanetId);
 
+						//6 stations completed means war
+						if (!GameCore.SingletonInstance.GameData.ActiveSaveFile.AtWar &&
+							GameCore.SingletonInstance.GameData.ActiveSaveFile.BaseGameData.Planets.Values.Count(p => p.Station.Built && !p.ActiveMethanoid) == 6)
+						{
+							await ShowMethanoidTextFrame(GameCore.SingletonInstance.GameData.ActiveSaveFile.BaseGameData.ModuleFrameTexts[Enums.ModuleFrameText.Methanoid_DeclareWar], new List<string>());
+
+							GameCore.SingletonInstance.GameData.ActiveSaveFile.AtWar = true;
+							GameCore.SingletonInstance.GameData.ActiveSaveFile.WarDeclaredDay = GameCore.SingletonInstance.GameData.ActiveSaveFile.CurrentDay;
+
+							//create enemy fleet used to attack the player
+							var enemyFleet = new IOS();
+							enemyFleet.MethanoidOwned = true;
+							enemyFleet.PlanetLocation = StellarBodies.none;
+							enemyFleet.Pilot = new Staff();
+							//make pilot an admiral
+							enemyFleet.Pilot.ActionsTaken = 50;
+
+							GameCore.SingletonInstance.GameData.ActiveSaveFile.Ships.Add(enemyFleet);
+
+							//debug - give some drones to jupiter
+							GameCore.SingletonInstance.GameData.ActiveSaveFile.BaseGameData.Planets[StellarBodies.jupiter].PlanetResources.Stores[ItemTypes.ios_drone] = 100;
+
+
+
+						}
+
 						UpdateState();
 					}
 					else if (Ship.Modules[modulePressed].ItemStored == ItemTypes.grapple)
@@ -247,6 +338,27 @@ namespace Deuteros.Code.Platform.Screens
 					}
 				}
 			}
+		}
+
+		private async Task ShowBattleFrame(InterStellarShip player, InterStellarShip enemy)
+		{
+			BattleScreen = GD.Load<PackedScene>("res://PreFabs/ShipModuleWindows/Battle.tscn").Instantiate<Battle>();
+
+			Window.AddChild(BattleScreen);
+
+			await BattleScreen.DoBattle(player, enemy);
+
+			Window.RemoveChild(BattleScreen);
+		}
+
+		private void ShowDroneTrasferFrame(InterStellarShip player)
+		{
+			FleetTransfers = GD.Load<PackedScene>("res://PreFabs/ShipModuleWindows/FleetTransfers.tscn").Instantiate<FleetTransfers>();
+
+			Window.AddChild(FleetTransfers);
+
+			FleetTransfers.TransferDrones(player);
+
 		}
 
 		private async Task ShowModuleTextFrame(TextFrame newTextFrame, List<string> dynamicProperties, int windowNumber)
@@ -264,6 +376,25 @@ namespace Deuteros.Code.Platform.Screens
 			GameCore.UnLockScreen();
 		}
 
+		private async Task ShowMethanoidTextFrame(TextFrame newTextFrame, List<string> dynamicProperties)
+		{
+			//for now we use the existing text frame
+			await ShowModuleTextFrame(newTextFrame, dynamicProperties, 1);
+
+			/*
+			GameCore.LockScreen();
+			MethanoidTextFrame = GD.Load<PackedScene>("res://PreFabs/ShipModuleWindows/MethanoidTextFrame.tscn").Instantiate<MethanoidTextFrame>();
+			Window.AddChild(MethanoidTextFrame);
+
+			await MethanoidTextFrame.PlayText(newTextFrame, dynamicProperties);
+
+			Window.RemoveChild(MethanoidTextFrame);
+			MethanoidTextFrame = null;
+
+			GameCore.UnLockScreen();
+			*/
+		}
+
 		private void Land_Pressed()
 		{
 			Ship.Land();
@@ -278,8 +409,18 @@ namespace Deuteros.Code.Platform.Screens
 
 		private void Dock_Pressed()
 		{
-			Ship.Dock();
-			UpdateState();
+            if (Ship.ShipType == Ship_Types.Shuttle || ((InterStellarShip)Ship).AttackedCount == 0)
+			{
+				if (Ship.ShipType != Ship_Types.Shuttle &&
+					GameCore.SingletonInstance.GameData.ActiveSaveFile.AtWar &&
+					GameCore.SingletonInstance.GameData.ActiveSaveFile.BaseGameData.Planets[Ship.PlanetLocation].ActiveMethanoid)
+				{
+                    GameCore.SingletonInstance.GameData.ActiveSaveFile.BaseGameData.Planets[Ship.PlanetLocation].ActiveMethanoid = false;
+				}
+
+                Ship.Dock();
+				UpdateState();
+			}
 		}
 
 		private void SmallLocation_Pressed()
@@ -632,7 +773,27 @@ namespace Deuteros.Code.Platform.Screens
 
 			foreach (var ship in GameCore.SingletonInstance.GameData.ActiveSaveFile.Ships)
 			{
-				if ((ship.ShipState == Enums.Ship_States.Launching || ship.ShipState == Enums.Ship_States.Landing || ship.ShipState == Enums.Ship_States.TakingOff || ship.ShipState == Enums.Ship_States.Docking || ship.ShipState == Enums.Ship_States.InTransit) && ship.Fuel > 0)
+				if (ship.ShipType != Ship_Types.Shuttle)
+				{
+
+					if (GameCore.SingletonInstance.GameData.ActiveSaveFile.AtWar &&
+                        !((InterStellarShip)ship).MethanoidOwned &&
+                        ship.ShipState == Ship_States.UnDocked &&
+                        (GameCore.SingletonInstance.GameData.ActiveSaveFile.BaseGameData.Planets[ship.PlanetLocation].ActiveMethanoid ||
+						GameCore.SingletonInstance.GameData.ActiveSaveFile.Ships.Exists(s => s.PlanetLocation == ship.PlanetLocation && s.ShipType != Ship_Types.Shuttle && ((InterStellarShip)s).MethanoidOwned))
+					)
+					{
+						((InterStellarShip)ship).AttackedCount++;
+					}
+					else
+					{
+
+						((InterStellarShip)ship).AttackedCount = 0;
+					}
+				}
+
+
+                if ((ship.ShipState == Enums.Ship_States.Launching || ship.ShipState == Enums.Ship_States.Landing || ship.ShipState == Enums.Ship_States.TakingOff || ship.ShipState == Enums.Ship_States.Docking || ship.ShipState == Enums.Ship_States.InTransit) && ship.Fuel > 0)
 				{
 					ship.Fuel--;
 					ship.FallingCount = 0;
@@ -712,7 +873,7 @@ namespace Deuteros.Code.Platform.Screens
 			}
 			foreach (var ship in GameCore.SingletonInstance.GameData.ActiveSaveFile.Ships)
 			{
-				if (ship.FallingCount == 5)
+				if (ship.FallingCount == 5 || (ship.ShipType!=Ship_Types.Shuttle && ((InterStellarShip)ship).AttackedCount == 2))
 					//ship destroyed
 					GameCore.SingletonInstance.GameData.ActiveSaveFile.Ships.Remove(ship);
 			}

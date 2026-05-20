@@ -15,8 +15,13 @@ namespace Deuteros.Code.Objects
         public bool Scanning { get; set; }
         public bool Mining { get; set; }
 		public Asteroid AsteroidScanResults { get; set; }
+        public bool MethanoidOwned { get; set; }
 
-		public override int TravelTimeRemain()
+        public bool PTL { get; set; }
+        public int DroneCount { get; set; }
+        public int AttackedCount { get; set; }
+
+        public override int TravelTimeRemain()
         {
             int totalJourneyTime = 0;
 

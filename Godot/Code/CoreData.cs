@@ -44,7 +44,9 @@ namespace Deuteros.Code
 			newGameSave.Unlocks = new List<Enums.Game_Unlocks>();
 			newGameSave.Ships = new List<IShip>();
 			newGameSave.CurrentDay = 0;
-			newGameSave.GameConfig.ShuttleRefuelThreshold = 50;
+            newGameSave.AtWar = false;
+            newGameSave.WarDeclaredDay = 0;
+            newGameSave.GameConfig.ShuttleRefuelThreshold = 50;
 			newGameSave.GameConfig.IOSRefuelThreshold = 200;
 			newGameSave.NextPersonIndex = Random.Shared.Next(StaticGameData.PersonNames.Count() + 1);
 
@@ -130,11 +132,23 @@ namespace Deuteros.Code
 
 				StaticGameData.ModuleFrameTexts.Add(MethanoidIntroWithGrapple);
 
-				#endregion
+                var MethanoidDeclareWar = new TextFrame(Enums.ModuleFrameText.Methanoid_DeclareWar);
+                MethanoidDeclareWar.Lines.Add(new Objects.ModuleTextFrame.Line("Thats's Far Enough,", StaticGameData.LightBlue, false, true));
+                MethanoidDeclareWar.Lines.Add(new Objects.ModuleTextFrame.Line("Earthling !", StaticGameData.LightBlue, false, true));
+                MethanoidDeclareWar.Lines.Add(new Objects.ModuleTextFrame.Line("", StaticGameData.LightBlue, false, true));
+                MethanoidDeclareWar.Lines.Add(new Objects.ModuleTextFrame.Line("You Have Become Too", StaticGameData.LightBlue, false, true));
+                MethanoidDeclareWar.Lines.Add(new Objects.ModuleTextFrame.Line("Strong For Your Own", StaticGameData.LightBlue, false, true));
+                MethanoidDeclareWar.Lines.Add(new Objects.ModuleTextFrame.Line("Good.", StaticGameData.LightBlue, false, true));
+                MethanoidDeclareWar.Lines.Add(new Objects.ModuleTextFrame.Line("", StaticGameData.LightBlue, false, true));
+                MethanoidDeclareWar.Lines.Add(new Objects.ModuleTextFrame.Line("This Means War !", StaticGameData.LightBlue, false, true));
 
-				#region BulletinText
+                StaticGameData.ModuleFrameTexts.Add(MethanoidDeclareWar);
 
-				StaticGameData.BulletinTexts = new BulletinContainer();
+                #endregion
+
+                #region BulletinText
+
+                StaticGameData.BulletinTexts = new BulletinContainer();
 
 							StaticGameData.BulletinTexts.Add(new Bulletin(BulletinTypes.IOS,
 								"We've made some preliminary\r\n" +
@@ -202,7 +216,7 @@ namespace Deuteros.Code
 								" \r\n" +
 								"It's mechanism is beyond my\r\n" +
 								"comprehension but we CAN copy\r\n" +
-								"it...s"));
+								"it..."));
 
 							StaticGameData.BulletinTexts.Add(new Bulletin(BulletinTypes.Sol_Cleared,
 								"We are certain that there are\r\n" +
@@ -1462,16 +1476,19 @@ namespace Deuteros.Code
 					IsMoon = false,
 					ParentStar = Enums.StellarBodies.the_sun,
 					ActiveMethanoid = true,
+
 					PlanetResources = new Objects.PlanetResource(new List<Objects.Material>()
 						{
 							new Objects.Material(Enums.ItemTypes.hydrogen, 1),
-							new Objects.Material(Enums.ItemTypes.helium, 1)
+							new Objects.Material(Enums.ItemTypes.helium, 1),
+//debug data for testing
+							new Objects.Material(Enums.ItemTypes.ios_drone, 100)
 						}
 					),
 					MoonList = new List<int> { 1, 2, 3, 4, 6, 7, 8, 9, 10 },
 					PlanetColor = PlanetColor.yellow,
 					PlanetStyle = PlanetStyle.giant
-				});
+				}) ;
 
 				StaticGameData.Planets.Add(Enums.StellarBodies.amalthea, new Objects.Planet(Enums.StellarBodies.amalthea, 0)
 				{

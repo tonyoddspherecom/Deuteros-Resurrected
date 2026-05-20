@@ -248,7 +248,10 @@ namespace Deuteros.Code
 		public delegate void ShipCreatedDelegate(IShip ship);
 		public event ShipCreatedDelegate ShipCreated;
 
-		public delegate void UnlockAddedDelegate(Enums.Game_Unlocks addedUnlock);
+        public delegate void AlientTechDiscoveryDelegate(ItemTypes techType);
+        public event AlientTechDiscoveryDelegate AlienTechDiscovery;
+
+        public delegate void UnlockAddedDelegate(Enums.Game_Unlocks addedUnlock);
 		public event UnlockAddedDelegate UnlockAdded;
 
 		public GameCore()
@@ -329,8 +332,12 @@ namespace Deuteros.Code
 		{
 			UnlockAdded?.Invoke(addedUnlock);
 		}
+        public void TriggerAlienTechDiscovery(Enums.ItemTypes techType)
+        {
+            AlienTechDiscovery?.Invoke(techType);
+        }
 
-		public Deuteros.Code.Objects.Interfaces.IPlanet GetCurrentPlanet()
+        public Deuteros.Code.Objects.Interfaces.IPlanet GetCurrentPlanet()
 		{
 			return GameData.ActiveSaveFile.BaseGameData.Planets[GameData.ActiveSaveFile.CurrentPlanet];
 		}
@@ -359,11 +366,6 @@ namespace Deuteros.Code
 					QueueRedraw();
 				}
 			}
-		}
-
-		public void TriggerUnlock(Game_Unlocks unlock)
-		{
-			_unlocker.TriggerUnlock(unlock);
 		}
 
 		public void ShowBulletin(BulletinTypes bulletin)

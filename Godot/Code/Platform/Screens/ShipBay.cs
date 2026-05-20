@@ -721,7 +721,7 @@ namespace Deuteros.Code.Platform.Screens
 			var currentModule = Ship.Modules[torsoSection];
 			var oldType = currentModule.ModuleType;
 
-            var currentStore = Ground ? CurrentPlanet.PlanetResources.Stores : CurrentPlanet.Station.Resources.Stores;
+			var currentStore = Ground ? CurrentPlanet.PlanetResources.Stores : CurrentPlanet.Station.Resources.Stores;
 
 			if (currentModule.ModuleType == Enums.Module_Types.Supply && (currentModule.ItemCount > 0 || moduleType == Module_Types.Supply))
 				return false;
@@ -739,33 +739,33 @@ namespace Deuteros.Code.Platform.Screens
 				Ship.Modules[torsoSection].ModuleType = moduleType;
 
 
-            switch (moduleType)
-            {
-                case Module_Types.Supply:
-					currentStore[ItemTypes.supply_pod] -= 1;
-                    break;
-                case Module_Types.Tool:
-					currentStore[ItemTypes.tool_pod] -= 1;
-                    break;
-                case Module_Types.Cryo:
-					currentStore[ItemTypes.cryo_pod] -= 1;
-                    break;
-            }
-
-            switch (oldType)
+			switch (moduleType)
 			{
-                case Module_Types.Supply:
-					currentStore[ItemTypes.supply_pod] += 1;
-                    break;
-                case Module_Types.Tool:
-					currentStore[ItemTypes.tool_pod] += 1;
-                    break;
-                case Module_Types.Cryo:
-					currentStore[ItemTypes.cryo_pod] += 1;
-                    break;
-            }
+				case Module_Types.Supply:
+					currentStore[ItemTypes.supply_pod] -= 1;
+					break;
+				case Module_Types.Tool:
+					currentStore[ItemTypes.tool_pod] -= 1;
+					break;
+				case Module_Types.Cryo:
+					currentStore[ItemTypes.cryo_pod] -= 1;
+					break;
+			}
 
-            return true;
+			switch (oldType)
+			{
+				case Module_Types.Supply:
+					currentStore[ItemTypes.supply_pod] += 1;
+					break;
+				case Module_Types.Tool:
+					currentStore[ItemTypes.tool_pod] += 1;
+					break;
+				case Module_Types.Cryo:
+					currentStore[ItemTypes.cryo_pod] += 1;
+					break;
+			}
+
+			return true;
 		}
 
 		private void ShipBay_ModuleOpened(int torsoSection)
@@ -878,6 +878,13 @@ namespace Deuteros.Code.Platform.Screens
 			else if (Ship.Modules[ScreenState - 1].ItemStored != itemType && ResourceList.Stores[itemType] > 0)
 			{
 				Ship.Modules[ScreenState - 1].ItemStored = itemType;
+
+				if (Ship.ShipType!=Ship_Types.Shuttle && itemType == ItemTypes.d__f__c__c)
+				{
+					//todo show dfcc assembly animation
+
+					((InterStellarShip)Ship).DFCC = true;
+				}
 
 				if (GameCore.SingletonInstance.GameData.GetItem(itemType).ToolPodSingular)
 				{

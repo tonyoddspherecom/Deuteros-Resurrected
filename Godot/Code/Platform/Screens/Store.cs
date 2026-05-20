@@ -105,7 +105,7 @@ namespace Deuteros.Code.Platform.Screens
 			
 			if (ViewTypeToggle && currentPlanet.Station.MtxInstalled && !GameCore.SingletonInstance.GameData.ActiveSaveFile.Unlocks.Contains(Enums.Game_Unlocks.Mass_Tranceiver))
 			{
-				GameCore.SingletonInstance.TriggerUnlock(Enums.Game_Unlocks.Mass_Tranceiver);
+				GameCore.SingletonInstance.TriggerAlienTechDiscovery(Enums.ItemTypes.m__t__x);
 			}
 
 			DrawData();

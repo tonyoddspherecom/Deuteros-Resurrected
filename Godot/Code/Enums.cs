@@ -452,7 +452,22 @@ namespace Deuteros.Code
             RFrame_Deploy,
             RFrame_Deploy_Complete,
 			Methanoid_Intro,
-			Methanoid_Intro_With_Grapple
-		}
+			Methanoid_Intro_With_Grapple,
+            Methanoid_DeclareWar,
+        }
+        public enum BattleState
+        {
+            NotStarted = 1,
+            FleetsAdvancing = 2,
+            FleetsInBattle = 3,
+            BattleEnded = 4
+        }
+
+        public enum PTLState
+        {
+            NotFired = 0,
+            Firing = 1,
+            Fired = 2
+        }
     }
 }

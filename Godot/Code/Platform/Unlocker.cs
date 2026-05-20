@@ -11,11 +11,47 @@ namespace Deuteros.Code.Platform
     {
         public Unlocker()
         {
+            GameCore.SingletonInstance.DayPassed += SingletonInstance_DayPassed;
             GameCore.SingletonInstance.ProductionFinished += SingletonInstance_ProductionFinished;
             GameCore.SingletonInstance.ResearchFinished += SingletonInstance_ResearchFinished;
             GameCore.SingletonInstance.ShipCreated += SingletonInstance_ShipCreated;
             GameCore.SingletonInstance.StationPiecePlaced += SingletonInstance_StationPiecePlaced;
+            GameCore.SingletonInstance.AlienTechDiscovery += SingletonInstance_AlienTechDiscovery;
         }
+
+        private void SingletonInstance_AlienTechDiscovery(Enums.ItemTypes techType)
+        {
+            switch (techType)
+            {
+                case Enums.ItemTypes.m__t__x:
+                    GameCore.SingletonInstance.ShowBulletin(Enums.BulletinTypes.Matter_Transmitter);
+                    GameCore.SingletonInstance.GameData.ActiveSaveFile.Unlocks.Add(Enums.Game_Unlocks.Mass_Tranceiver);
+                    GameCore.SingletonInstance.GameData.GetItem(Enums.ItemTypes.m__t__x).Research.Locked = false;
+                    break;
+
+                case Enums.ItemTypes.s__d__m:
+                    GameCore.SingletonInstance.ShowBulletin(Enums.BulletinTypes.Self_Destruct);
+                    GameCore.SingletonInstance.GameData.ActiveSaveFile.Unlocks.Add(Enums.Game_Unlocks.Self_Destruct);
+                    GameCore.SingletonInstance.GameData.GetItem(Enums.ItemTypes.s__d__m).Research.Locked = false;
+                    break;
+            }
+        }
+
+            private void SingletonInstance_DayPassed(uint previousDay, uint currentDay)
+        {
+            if (
+                GameCore.SingletonInstance.GameData.ActiveSaveFile.MethanoidTradeCount<17 && 
+                GameCore.SingletonInstance.GameData.ActiveSaveFile.AtWar &&
+                currentDay == GameCore.SingletonInstance.GameData.ActiveSaveFile.WarDeclaredDay + 1 &&
+                !GameCore.SingletonInstance.GameData.ActiveSaveFile.Unlocks.Contains(Enums.Game_Unlocks.D_F_C_C))
+            {
+                GameCore.SingletonInstance.ShowBulletin(Enums.BulletinTypes.Drone_Ships);
+                GameCore.SingletonInstance.GameData.ActiveSaveFile.Unlocks.Add(Enums.Game_Unlocks.D_F_C_C);
+                GameCore.SingletonInstance.GameData.GetItem(Enums.ItemTypes.d__f__c__c).Research.Locked = false;
+                GameCore.SingletonInstance.GameData.GetItem(Enums.ItemTypes.ios_drone).Research.Locked = false;
+            }
+        }
+
 
         private void SingletonInstance_StationPiecePlaced(Enums.StellarBodies stellarBody)
         {
@@ -47,7 +83,7 @@ namespace Deuteros.Code.Platform
 
         private void SingletonInstance_ResearchFinished(Objects.ResearchItem researchItem)
         {
-            
+
         }
 
         private void SingletonInstance_ProductionFinished(Objects.Factory factory)
@@ -66,25 +102,5 @@ namespace Deuteros.Code.Platform
             }
         }
 
-        public void TriggerUnlock(Enums.Game_Unlocks unlock)
-        {
-            switch (unlock)
-            {
-                case Enums.Game_Unlocks.Mass_Tranceiver:
-                    GameCore.SingletonInstance.ShowBulletin(Enums.BulletinTypes.Matter_Transmitter);
-                    GameCore.SingletonInstance.GameData.ActiveSaveFile.Unlocks.Add(Enums.Game_Unlocks.Mass_Tranceiver);
-                    break;
-
-                case Enums.Game_Unlocks.D_F_C_C:
-                    GameCore.SingletonInstance.ShowBulletin(Enums.BulletinTypes.Drone_Ships);
-                    GameCore.SingletonInstance.GameData.ActiveSaveFile.Unlocks.Add(Enums.Game_Unlocks.D_F_C_C);
-                    break;
-
-                case Enums.Game_Unlocks.Self_Destruct:
-                    GameCore.SingletonInstance.ShowBulletin(Enums.BulletinTypes.Self_Destruct);
-                    GameCore.SingletonInstance.GameData.ActiveSaveFile.Unlocks.Add(Enums.Game_Unlocks.Self_Destruct);
-                    break;
-            }
-        }
     }
 }

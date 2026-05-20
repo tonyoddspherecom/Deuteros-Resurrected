@@ -1,0 +1,108 @@
+[gd_scene load_steps=7 format=3 uid="uid://b5mj3sbst3ggi"]
+
+[ext_resource type="Script" path="res://Code/Platform/Screens/ModuleScenes/FleetTransfers.cs" id="1_26m6p"]
+[ext_resource type="Texture2D" uid="uid://b118xixu2352x" path="res://Sprites/SceneSprites/BattleFrame.png" id="2_2kegu"]
+[ext_resource type="Texture2D" uid="uid://cvv5l3u14qnys" path="res://Sprites/SceneSprites/BattleSmallShip.png" id="6_6wjip"]
+[ext_resource type="PackedScene" uid="uid://dlpf322m5s804" path="res://PreFabs/Buttons/RepeatingButton.tscn" id="7_1m426"]
+[ext_resource type="Texture2D" uid="uid://c13gwlhrma0g" path="res://Sprites/Buttons/BattleButton1.png" id="8_jc3l7"]
+[ext_resource type="Texture2D" uid="uid://c42lhbnnkvggg" path="res://Sprites/Buttons/BattleButton2.png" id="9_n8cnq"]
+
+[node name="FleetTransfers" type="Node2D"]
+script = ExtResource("1_26m6p")
+
+[node name="Background" type="TextureRect" parent="."]
+texture_filter = 1
+offset_left = 64.0
+offset_top = 23.0
+offset_right = 304.0
+offset_bottom = 143.0
+texture = ExtResource("2_2kegu")
+stretch_mode = 2
+
+[node name="PowerColorRect" type="ColorRect" parent="."]
+offset_left = 200.0
+offset_top = 94.0
+offset_right = 269.0
+offset_bottom = 134.0
+color = Color(0.333333, 0.4, 0.2, 1)
+
+[node name="PowerLabel" type="Label" parent="PowerColorRect"]
+layout_mode = 0
+offset_top = 3.0
+offset_right = 64.0
+offset_bottom = 41.0
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+text = "
+ Fleet
+ Power
+   192"
+
+[node name="ShipImage" type="TextureRect" parent="."]
+offset_left = 100.0
+offset_top = 94.0
+offset_right = 141.0
+offset_bottom = 112.0
+texture = ExtResource("6_6wjip")
+stretch_mode = 2
+
+[node name="OrbitalColorRect" type="ColorRect" parent="."]
+offset_left = 94.0
+offset_top = 40.0
+offset_right = 163.0
+offset_bottom = 80.0
+color = Color(0.333333, 0.4, 0.2, 1)
+
+[node name="OrbitalDronePoolLabel" type="Label" parent="OrbitalColorRect"]
+layout_mode = 0
+offset_top = 3.0
+offset_right = 64.0
+offset_bottom = 41.0
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+text = " Orbital 
+  Drone
+  Pool
+      0"
+
+[node name="FleetColorRect" type="ColorRect" parent="."]
+offset_left = 201.0
+offset_top = 41.0
+offset_right = 270.0
+offset_bottom = 81.0
+color = Color(0.333333, 0.4, 0.2, 1)
+
+[node name="FleetDronePoolLabel" type="Label" parent="FleetColorRect"]
+layout_mode = 0
+offset_top = 3.0
+offset_right = 64.0
+offset_bottom = 41.0
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+text = "
+ Fleet
+ Drones
+  192"
+
+[node name="RepeatingButton2" parent="." instance=ExtResource("7_1m426")]
+offset_left = 163.0
+offset_top = 63.0
+offset_right = 187.0
+offset_bottom = 81.0
+RepeatRate = 0.01
+
+[node name="TransferButton2" type="TextureRect" parent="RepeatingButton2"]
+layout_mode = 0
+offset_right = 24.0
+offset_bottom = 18.0
+texture = ExtResource("8_jc3l7")
+
+[node name="RepeatingButton1" parent="." instance=ExtResource("7_1m426")]
+offset_left = 176.0
+offset_top = 40.0
+offset_right = 200.0
+offset_bottom = 58.0
+RepeatRate = 0.01
+
+[node name="TransferButton1" type="TextureRect" parent="RepeatingButton1"]
+layout_mode = 0
+offset_right = 24.0
+offset_bottom = 18.0
+texture = ExtResource("9_n8cnq")

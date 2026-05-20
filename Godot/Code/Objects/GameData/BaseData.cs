@@ -26,5 +26,6 @@ namespace Deuteros.Code.Objects.GameData
         public Color Beige { get; set; } = new Color(153, 170, 119, 255);
         public Color Dark_Beige { get; set; } = new Color(85, 102, 51, 255);
         public Color Yellow { get; set; } = new Color(255, 255, 0, 255);
+        public Color LightBlue { get; set; } = new Color(170, 204, 238, 255);
     }
 }

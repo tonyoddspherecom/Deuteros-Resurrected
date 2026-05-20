@@ -1,0 +1,111 @@
+[gd_scene load_steps=7 format=3 uid="uid://b2atsyucu7qdj"]
+
+[ext_resource type="Script" path="res://Code/Platform/Screens/ModuleScenes/Battle.cs" id="1_3dbsf"]
+[ext_resource type="Texture2D" uid="uid://b118xixu2352x" path="res://Sprites/SceneSprites/BattleFrame.png" id="2_6vosr"]
+[ext_resource type="Script" path="res://Code/Objects/BattleCanvas.cs" id="3_rvrbw"]
+[ext_resource type="Texture2D" uid="uid://cxisx5trwwh38" path="res://Sprites/Buttons/flee.png" id="4_ruoit"]
+[ext_resource type="Texture2D" uid="uid://bmb2ych4bk3ef" path="res://Sprites/Buttons/ptl.png" id="5_rpjyn"]
+[ext_resource type="Texture2D" uid="uid://dbwk777um7eyk" path="res://Sprites/SceneSprites/BattleStation.png" id="10_7g7dj"]
+
+[node name="Battle" type="Node2D"]
+script = ExtResource("1_3dbsf")
+
+[node name="Background" type="TextureRect" parent="."]
+texture_filter = 1
+offset_left = 64.0
+offset_top = 23.0
+offset_right = 304.0
+offset_bottom = 143.0
+texture = ExtResource("2_6vosr")
+stretch_mode = 2
+
+[node name="BattleCanvas" type="Control" parent="."]
+clip_contents = true
+layout_mode = 3
+anchors_preset = 0
+offset_left = 76.0
+offset_top = 37.0
+offset_right = 297.0
+offset_bottom = 120.0
+script = ExtResource("3_rvrbw")
+
+[node name="PlayerLabels" type="Label" parent="."]
+offset_left = 88.0
+offset_top = 25.0
+offset_right = 144.0
+offset_bottom = 34.0
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+text = "D  PWR"
+
+[node name="EnemyLabels" type="Label" parent="."]
+offset_left = 240.0
+offset_top = 25.0
+offset_right = 296.0
+offset_bottom = 34.0
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+text = "D  PWR"
+
+[node name="PlayerShips" type="Label" parent="."]
+offset_left = 80.0
+offset_top = 32.0
+offset_right = 120.0
+offset_bottom = 41.0
+theme_override_colors/font_color = Color(0, 0.533333, 0, 1)
+text = "999"
+
+[node name="PlayerPower" type="Label" parent="."]
+offset_left = 112.0
+offset_top = 32.0
+offset_right = 152.0
+offset_bottom = 41.0
+theme_override_colors/font_color = Color(0, 0.533333, 0, 1)
+text = "999"
+
+[node name="EnemyShips" type="Label" parent="."]
+offset_left = 232.0
+offset_top = 32.0
+offset_right = 272.0
+offset_bottom = 41.0
+theme_override_colors/font_color = Color(1, 0, 0, 1)
+text = "999"
+
+[node name="EnemyPower" type="Label" parent="."]
+offset_left = 264.0
+offset_top = 32.0
+offset_right = 304.0
+offset_bottom = 41.0
+theme_override_colors/font_color = Color(1, 0, 0, 1)
+text = "999"
+
+[node name="PlayerFlee" type="TextureButton" parent="."]
+offset_left = 129.0
+offset_top = 125.0
+offset_right = 193.0
+offset_bottom = 138.0
+texture_normal = ExtResource("4_ruoit")
+
+[node name="PlayerPTL" type="TextureButton" parent="."]
+offset_left = 193.0
+offset_top = 125.0
+offset_right = 258.0
+offset_bottom = 139.0
+texture_normal = ExtResource("5_rpjyn")
+
+[node name="Timer" type="Timer" parent="."]
+wait_time = 0.06
+
+[node name="PlayerStation" type="TextureRect" parent="."]
+offset_left = 85.0
+offset_top = 73.0
+offset_right = 121.0
+offset_bottom = 92.0
+texture = ExtResource("10_7g7dj")
+stretch_mode = 2
+
+[node name="EnemyStation" type="TextureRect" parent="."]
+offset_left = 254.0
+offset_top = 73.0
+offset_right = 290.0
+offset_bottom = 92.0
+texture = ExtResource("10_7g7dj")
+stretch_mode = 2
