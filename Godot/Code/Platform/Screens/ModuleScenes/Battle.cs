@@ -29,6 +29,7 @@ public partial class Battle : BaseSubScene
 
 	Godot.Timer BattleTimer { get; set; }
 	BattleCanvas BattleCanvas { get; set; }
+	StarsCanvas StarsCanvas { get; set; }
 
 	BattleLogic _battle;
 	InterStellarShip _player;
@@ -50,6 +51,8 @@ public partial class Battle : BaseSubScene
 		EnemyPower = GetNode<Label>("EnemyPower");
 
 		BattleCanvas = GetNode<BattleCanvas>("BattleCanvas");
+		
+		StarsCanvas = GetNode<StarsCanvas>("StarsCanvas");
 
 		PlayerStation = GetNode<TextureRect>("PlayerStation");
 		EnemyStation = GetNode<TextureRect>("EnemyStation");

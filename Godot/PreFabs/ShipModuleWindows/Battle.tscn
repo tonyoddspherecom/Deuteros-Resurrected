@@ -1,7 +1,8 @@
-[gd_scene load_steps=7 format=3 uid="uid://b2atsyucu7qdj"]
+[gd_scene load_steps=8 format=3 uid="uid://b2atsyucu7qdj"]
 
 [ext_resource type="Script" path="res://Code/Platform/Screens/ModuleScenes/Battle.cs" id="1_3dbsf"]
 [ext_resource type="Texture2D" uid="uid://b118xixu2352x" path="res://Sprites/SceneSprites/BattleFrame.png" id="2_6vosr"]
+[ext_resource type="Script" path="res://Code/Objects/StarsCanvas.cs" id="3_d0fsi"]
 [ext_resource type="Script" path="res://Code/Objects/BattleCanvas.cs" id="3_rvrbw"]
 [ext_resource type="Texture2D" uid="uid://cxisx5trwwh38" path="res://Sprites/Buttons/flee.png" id="4_ruoit"]
 [ext_resource type="Texture2D" uid="uid://bmb2ych4bk3ef" path="res://Sprites/Buttons/ptl.png" id="5_rpjyn"]
@@ -19,7 +20,7 @@ offset_bottom = 143.0
 texture = ExtResource("2_6vosr")
 stretch_mode = 2
 
-[node name="BattleCanvas" type="Control" parent="."]
+[node name="StarsCanvas" type="Control" parent="."]
 clip_contents = true
 layout_mode = 3
 anchors_preset = 0
@@ -27,7 +28,7 @@ offset_left = 76.0
 offset_top = 37.0
 offset_right = 297.0
 offset_bottom = 120.0
-script = ExtResource("3_rvrbw")
+script = ExtResource("3_d0fsi")
 
 [node name="PlayerLabels" type="Label" parent="."]
 offset_left = 88.0
@@ -109,3 +110,13 @@ offset_right = 290.0
 offset_bottom = 92.0
 texture = ExtResource("10_7g7dj")
 stretch_mode = 2
+
+[node name="BattleCanvas" type="Control" parent="."]
+clip_contents = true
+layout_mode = 3
+anchors_preset = 0
+offset_left = 76.0
+offset_top = 37.0
+offset_right = 297.0
+offset_bottom = 120.0
+script = ExtResource("3_rvrbw")
