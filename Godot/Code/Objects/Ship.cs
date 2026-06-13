@@ -32,7 +32,7 @@ namespace Deuteros.Code.Objects
 
 		public void Dock()
         {
-            if (ShipState == Ship_States.UnDocked && GameCore.SingletonInstance.GameData.ActiveSaveFile.BaseGameData.Planets[PlanetLocation].Station.Built)
+            if (ShipState == Ship_States.UnDocked && (GameCore.SingletonInstance.GameData.ActiveSaveFile.BaseGameData.Planets[PlanetLocation].Station.Built || PlanetLocation == StellarBodies.asteroids))
             {
                 StartTravelDay = GameCore.SingletonInstance.GameData.ActiveSaveFile.CurrentDay;
                 ShipState = Ship_States.Docking;
@@ -52,7 +52,6 @@ namespace Deuteros.Code.Objects
         {
             if (Engine && Fuel > 0 && ShipState != Ship_States.CrewRepairing)
             {
-
                 if (Pilot != null) Pilot.ActionsTaken++;
 
                 //clear the Shuttle/Ship State to prevent scrolling in ship bay when ship is not there

@@ -1,7 +1,194 @@
-[gd_scene load_steps=2 format=3 uid="uid://dy6u4h4xvnly1"]
+[gd_scene load_steps=7 format=3 uid="uid://dy6u4h4xvnly1"]
 
 [ext_resource type="PackedScene" uid="uid://dfxcpnk8y4m45" path="res://PreFabs/UI/Window.tscn" id="1_iacv4"]
+[ext_resource type="Script" path="res://Code/Platform/Screens/ModuleScenes/AMA.cs" id="1_m7ifd"]
+[ext_resource type="Theme" uid="uid://d3ky76lin6gp4" path="res://Themes/GreenFont5.tres" id="3_2i2re"]
+[ext_resource type="Theme" uid="uid://44d6jm1awi5s" path="res://Themes/RedFont5.tres" id="4_2alv4"]
+[ext_resource type="Texture2D" uid="uid://cyp308k6165xf" path="res://Sprites/Buttons/Mine.png" id="5_1uqe6"]
+[ext_resource type="Texture2D" uid="uid://djgmitkigwr4g" path="res://Sprites/SceneSprites/Asteroid_Medium.png" id="6_wuixq"]
 
-[node name="Ama" type="Node2D"]
+[node name="AMA" type="Node2D"]
+script = ExtResource("1_m7ifd")
 
 [node name="Window" parent="." instance=ExtResource("1_iacv4")]
+
+[node name="Labels" type="Control" parent="."]
+layout_mode = 3
+anchors_preset = 0
+offset_left = 69.0
+offset_top = 28.0
+offset_right = 299.0
+offset_bottom = 138.0
+
+[node name="PodTypeHeaders" type="Control" parent="Labels"]
+visible = false
+anchors_preset = 0
+offset_right = 230.0
+offset_bottom = 110.0
+
+[node name="PodType" type="Label" parent="Labels/PodTypeHeaders"]
+layout_mode = 0
+offset_left = 3.0
+offset_top = 8.0
+offset_right = 187.0
+offset_bottom = 16.0
+text = "Pod Type: TOOL MOUNTING"
+
+[node name="Contents" type="Label" parent="Labels/PodTypeHeaders"]
+offset_left = 3.0
+offset_top = 24.0
+offset_right = 187.0
+offset_bottom = 32.0
+text = "Contents:"
+
+[node name="AsteroidMiningAttachment" type="Label" parent="Labels/PodTypeHeaders"]
+offset_left = 3.0
+offset_top = 40.0
+offset_right = 211.0
+offset_bottom = 48.0
+theme = ExtResource("3_2i2re")
+text = "Asteroid Mining Attachment"
+
+[node name="Warning" type="Control" parent="Labels"]
+visible = false
+anchors_preset = 0
+offset_right = 230.0
+offset_bottom = 110.0
+
+[node name="Warning" type="Label" parent="Labels/Warning"]
+offset_left = 82.0
+offset_top = 64.0
+offset_right = 146.0
+offset_bottom = 72.0
+theme = ExtResource("4_2alv4")
+text = "WARNING:"
+
+[node name="WarningBody" type="RichTextLabel" parent="Labels/Warning"]
+layout_mode = 0
+offset_left = 81.0
+offset_top = 72.0
+offset_right = 227.0
+offset_bottom = 107.0
+bbcode_enabled = true
+text = "A [color=yellow]Crew[/color] Is Required
+To Operate This
+Equipment And Must
+Be Ranked [color=yellow]Pilot[/color]"
+
+[node name="EquipmentActive" type="Control" parent="Labels"]
+visible = false
+anchors_preset = 0
+offset_right = 230.0
+offset_bottom = 110.0
+
+[node name="EquipmentActive" type="Label" parent="Labels/EquipmentActive"]
+offset_left = 11.0
+offset_top = 56.0
+offset_right = 195.0
+offset_bottom = 80.0
+theme = ExtResource("4_2alv4")
+text = "Equipment
+
+Active"
+
+[node name="Searching" type="Control" parent="Labels"]
+visible = false
+anchors_preset = 0
+offset_right = 230.0
+offset_bottom = 110.0
+
+[node name="PresentAsteroid" type="Label" parent="Labels/Searching"]
+layout_mode = 0
+offset_left = 3.0
+offset_top = 8.0
+offset_right = 75.0
+offset_bottom = 32.0
+text = "Present
+Asteroid
+Analysis:"
+
+[node name="None" type="Control" parent="Labels/Searching"]
+visible = false
+anchors_preset = 0
+offset_right = 40.0
+offset_bottom = 40.0
+
+[node name="NoAsteroids" type="Label" parent="Labels/Searching/None"]
+offset_left = 3.0
+offset_top = 64.0
+offset_right = 91.0
+offset_bottom = 88.0
+text = "No Asteroid
+In Vacinity"
+
+[node name="Found" type="Control" parent="Labels/Searching"]
+visible = false
+layout_mode = 3
+anchors_preset = 0
+offset_right = 40.0
+offset_bottom = 40.0
+
+[node name="Class" type="Label" parent="Labels/Searching/Found"]
+offset_left = 3.0
+offset_top = 40.0
+offset_right = 91.0
+offset_bottom = 64.0
+text = "Class
+"
+
+[node name="Size" type="Label" parent="Labels/Searching/Found"]
+offset_left = 51.0
+offset_top = 40.0
+offset_right = 139.0
+offset_bottom = 64.0
+theme = ExtResource("3_2i2re")
+text = "5
+500t."
+
+[node name="MainElement" type="Label" parent="Labels/Searching/Found"]
+offset_left = 3.0
+offset_top = 64.0
+offset_right = 131.0
+offset_bottom = 88.0
+text = "Main Element is"
+
+[node name="Type" type="Label" parent="Labels/Searching/Found"]
+offset_left = 3.0
+offset_top = 72.0
+offset_right = 91.0
+offset_bottom = 96.0
+theme = ExtResource("3_2i2re")
+text = "Titanium"
+
+[node name="Buttons" type="Control" parent="."]
+layout_mode = 3
+anchors_preset = 0
+offset_left = 69.0
+offset_top = 27.0
+offset_right = 299.0
+offset_bottom = 137.0
+
+[node name="Mine" type="TextureButton" parent="Buttons"]
+layout_mode = 0
+offset_left = 155.0
+offset_top = 53.0
+offset_right = 179.0
+offset_bottom = 69.0
+texture_normal = ExtResource("5_1uqe6")
+
+[node name="Sprites" type="Control" parent="."]
+layout_mode = 3
+anchors_preset = 0
+offset_left = 69.0
+offset_top = 28.0
+offset_right = 299.0
+offset_bottom = 138.0
+mouse_filter = 2
+
+[node name="Asteroid" type="TextureRect" parent="Sprites"]
+layout_mode = 0
+offset_left = 138.0
+offset_top = 5.0
+offset_right = 178.0
+offset_bottom = 45.0
+texture = ExtResource("6_wuixq")

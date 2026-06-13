@@ -26,6 +26,7 @@ namespace Deuteros.Code.Platform.Screens
 		Control Window { get; set; }
 		Control ACC { get; set; }
 		Control GrappleHolder { get; set; }
+		Control AMAHolder { get; set; }
 
 		TextureRect LandingBlank { get; set; }
 		TextureRect EngineControls { get; set; }
@@ -58,6 +59,7 @@ namespace Deuteros.Code.Platform.Screens
 		ModuleTextFrame ModuleTextFrame { get; set; }
 		ACC ACCScreen { get; set; }
 		Grapple GrappleScreen { get; set; }
+		AMA AMAScreen { get; set; }
 		Battle BattleScreen { get; set; }
 		FleetTransfers FleetTransfers { get; set; }
 		//MethanoidTextFrame MethanoidTextFrame { get; set; }
@@ -74,6 +76,7 @@ namespace Deuteros.Code.Platform.Screens
 			Window = GetNode<Control>("Window");
 			ACC = GetNode<Control>("ACCScreen");
 			GrappleHolder = GetNode<Control>("GrappleHolder");
+			AMAHolder = GetNode<Control>("AMAHolder");
 
 			LandingBlank = GetNode<TextureRect>("LandingBlank");
 			EngineControls = GetNode<TextureRect>("EngineControls");
@@ -132,7 +135,7 @@ namespace Deuteros.Code.Platform.Screens
 
 		private async void ShipInterior_Pressed(int modulePressed)
 		{
-			if (Ship.ShipState == Ship_States.Docked)
+			if (Ship.ShipState == Ship_States.Docked && Ship.PlanetLocation != StellarBodies.asteroids)
 			{
 				var sceneVariables = new List<SceneVariables>();
 				var newScene = Enums.Scenes.ShipBay;
@@ -227,7 +230,7 @@ namespace Deuteros.Code.Platform.Screens
 						{
 							enemyShip = new IOS();
 							//pull upto 200 drones from the planet store
-							enemyShip.DroneCount = Math.Min(200,GameCore.SingletonInstance.GameData.ActiveSaveFile.BaseGameData.Planets[Ship.PlanetLocation].PlanetResources.Stores[ItemTypes.ios_drone]);
+							enemyShip.DroneCount = Math.Min(200, GameCore.SingletonInstance.GameData.ActiveSaveFile.BaseGameData.Planets[Ship.PlanetLocation].PlanetResources.Stores[ItemTypes.ios_drone]);
 							GameCore.SingletonInstance.GameData.ActiveSaveFile.BaseGameData.Planets[Ship.PlanetLocation].PlanetResources.Stores[ItemTypes.ios_drone] -= enemyShip.DroneCount;
 						}
 						else
@@ -320,7 +323,6 @@ namespace Deuteros.Code.Platform.Screens
 								enemyFleet.Pilot.ActionsTaken = 50;
                                 GameCore.SingletonInstance.GameData.ActiveSaveFile.Ships.Add(enemyFleet);
                             }
-
                         }
 
 						UpdateState();
@@ -332,6 +334,18 @@ namespace Deuteros.Code.Platform.Screens
 						GrappleHolder.AddChild(GrappleScreen);
 
 						GrappleScreen.Load((InterStellarShip)Ship, Ship.Modules[modulePressed]);
+
+						UpdateState();
+					}
+					else if (Ship.Modules[modulePressed].ItemStored == ItemTypes.a__m__a)
+					{
+						AMAScreen = GD.Load<PackedScene>("res://PreFabs/ShipModuleWindows/AMA.tscn").Instantiate<AMA>();
+
+						AMAHolder.AddChild(AMAScreen);
+
+						AMAScreen.Load((InterStellarShip)Ship, Ship.Modules[modulePressed]);
+
+						AMAScreen.CloseWindow = CloseAMA;
 
 						UpdateState();
 					}
@@ -735,11 +749,35 @@ namespace Deuteros.Code.Platform.Screens
 						GrappleHolder.RemoveChild(GrappleScreen);
 
 						GrappleScreen.QueueFree();
+						GrappleScreen.Visible = false;
+						GrappleScreen = null;
+
+						GetViewport().SetInputAsHandled();
+					}
+					//We has the AMAopen - No need to do anything, just close it
+					else if (AMAScreen != null && AMAScreen.Visible == true)
+					{
+						AMAHolder.RemoveChild(AMAScreen);
+
+						AMAScreen.QueueFree();
+						AMAScreen.Visible = false;
+						AMAScreen = null;
 
 						GetViewport().SetInputAsHandled();
 					}
 				}
 			}
+		}
+
+		public void CloseAMA()
+		{
+			AMAHolder.RemoveChild(AMAScreen);
+
+			AMAScreen.QueueFree();
+			AMAScreen.Visible = false;
+			AMAScreen = null;
+
+			UpdateState();
 		}
 
 		public void CloseACC()
@@ -790,7 +828,6 @@ namespace Deuteros.Code.Platform.Screens
 						((InterStellarShip)ship).AttackedCount = 0;
 					}
 				}
-
 
                 if ((ship.ShipState == Enums.Ship_States.Launching || ship.ShipState == Enums.Ship_States.Landing || ship.ShipState == Enums.Ship_States.TakingOff || ship.ShipState == Enums.Ship_States.Docking || ship.ShipState == Enums.Ship_States.InTransit) && ship.Fuel > 0)
 				{
@@ -859,21 +896,58 @@ namespace Deuteros.Code.Platform.Screens
 				}
 				else if (ship.ShipState == Ship_States.Docked)
 				{
-					//The ship is docked, and we're not updating it - Might be waiting for fuel
-					ship.ACC?.Update(Ship_States.Docked);
+					//Were on an asteroid - Assume all is well and we just need to mine
+					if (ship.PlanetLocation == StellarBodies.asteroids)
+					{
+						//Is it time to generate some ore?
+						var minedAmount = AMA.Mine(((InterStellarShip)ship).AsteroidScanResults, ship.Modules.First(T => T.ModuleType == Module_Types.Tool && T.ItemStored == ItemTypes.a__m__a));
+
+						//Our cargo hold is full so we should take off
+						//We have to mine something to trigger a takeoff
+						if (minedAmount > 0 && !ship.Modules.Any(T => T.ModuleType == Module_Types.Supply && T.ItemCount < 250))
+						{
+							ship.Modules.First(T => T.ModuleType == Module_Types.Tool && T.ItemStored == ItemTypes.a__m__a).LastMinedDay = 0;
+							((InterStellarShip)ship).AsteroidScanResults.HasBeenMined = true;
+
+							ship.TakeOff();
+
+							ship.ACC?.Update(Ship_States.Docked);
+						}
+						else if (minedAmount > 0)
+						{
+							var firstModule = ship.Modules.First(T => T.ModuleType == Module_Types.Supply && (T.ItemStored == ItemTypes.none || (T.ItemStored == ((InterStellarShip)ship).AsteroidScanResults.Type && T.ItemCount < 250)));
+							firstModule.ItemCount = Math.Min(firstModule.ItemCount + minedAmount, 250);
+							firstModule.ItemStored = ((InterStellarShip)ship).AsteroidScanResults.Type;
+						}
+					}
+					else
+					{
+						//The ship is docked, and we're not updating it - Might be waiting for fuel, so notify anyway
+						ship.ACC?.Update(Ship_States.Docked);
+					}
 				}
 				else if (ship.ShipState == Ship_States.UnDocked)
 				{
-					//Were floating in space - Is there anything we need to do?
-					if (ship.PlanetLocation == StellarBodies.asteroids && ship.Modules.Any(T => T.ModuleType == Module_Types.Tool && T.ItemStored == ItemTypes.grapple))
-						((InterStellarShip)ship).AsteroidScanResults = Asteroid.ScanAsteroids(((InterStellarShip)ship).AsteroidScanResults);
-				}
+					//If we're at the asteroids and properly equipped we can scan asteroids
+					if (ship.PlanetLocation == StellarBodies.asteroids && ship.Modules.Any(T => T.ModuleType == Module_Types.Tool && (T.ItemStored == ItemTypes.grapple || T.ItemStored == ItemTypes.a__m__a)))
+					{
+						//Check grapple first
+						if (ship.Modules.Any(T => T.ModuleType == Module_Types.Tool && T.ItemStored == ItemTypes.grapple && ship.Pilot != null && ship.Pilot.GetLevel() > 1))
+							((InterStellarShip)ship).AsteroidScanResults = Asteroid.ScanAsteroids(((InterStellarShip)ship).AsteroidScanResults);
+						//The grapple check failed, check the AMA
+						else if (ship.Modules.Any(T => T.ModuleType == Module_Types.Tool && T.ItemStored == ItemTypes.a__m__a && ship.Pilot != null && ship.Pilot.GetLevel() > 0))
+							((InterStellarShip)ship).AsteroidScanResults = Asteroid.ScanAsteroids(((InterStellarShip)ship).AsteroidScanResults);
+					}
 
+					//Let the ACC know we are still undocked
+					ship.ACC?.Update(Ship_States.UnDocked);
+				}
 			}
 			foreach (var ship in GameCore.SingletonInstance.GameData.ActiveSaveFile.Ships)
 			{
 				if (ship.FallingCount == 5 || (ship.ShipType!=Ship_Types.Shuttle && ((InterStellarShip)ship).AttackedCount == 2))
 					//ship destroyed
+					//TODO need to play sound
 					GameCore.SingletonInstance.GameData.ActiveSaveFile.Ships.Remove(ship);
 			}
 		}

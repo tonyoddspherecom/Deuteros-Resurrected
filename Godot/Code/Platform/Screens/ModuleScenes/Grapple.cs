@@ -127,7 +127,7 @@ namespace Deuteros.Code.Platform.Screens.ModuleScenes
 				if (ShipModule.HeldAsteroid != null)
 				{
 					AsteroidSprite.Texture = SpriteManager.LoadImage(NavSpriteBasePath + "Asteroid_" + ShipModule.HeldAsteroid.MassName.ToString() + ".png");
-					ContentsLabel.Text = "Asteroid\r\n" + ShipModule.HeldAsteroid.Mass.ToString() + "T.\r\n" + ShipModule.HeldAsteroid.Type.ToScreenString();
+					ContentsLabel.Text = "Asteroid\r\n" + ShipModule.HeldAsteroid.Mass.ToString() + "t.\r\n" + ShipModule.HeldAsteroid.Type.ToScreenString();
 				}
 				else
 				{
@@ -140,7 +140,7 @@ namespace Deuteros.Code.Platform.Screens.ModuleScenes
 					var currentAsteroid = ((InterStellarShip)Ship).AsteroidScanResults;
 					ScannerStatusLabel.Text = "Object\r\nAsteroid";
 
-					MassLabel.Text = currentAsteroid.Mass.ToString() + "T.";
+					MassLabel.Text = currentAsteroid.Mass.ToString() + "t.";
 					ElementLabel.Text = "Main Element\r\n" + currentAsteroid.Type.ToScreenString();
 				}
 				else

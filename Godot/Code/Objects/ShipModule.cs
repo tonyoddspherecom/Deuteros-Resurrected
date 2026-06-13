@@ -14,6 +14,8 @@ namespace Deuteros.Code.Objects
         //Used for count of items and amount of ore
         public int ItemCount { get; set; }
 		public Asteroid HeldAsteroid { get; set; }
+        //The last day an attached AMA mined resources
+        public uint LastMinedDay { get; set; }
 
 		public ShipModule()
         {
