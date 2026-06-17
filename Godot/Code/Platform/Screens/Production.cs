@@ -9,6 +9,7 @@ using System.Security.Cryptography.X509Certificates;
 using Deuteros.Code.Objects.Interfaces;
 using static System.Collections.Specialized.BitVector32;
 using System.ComponentModel.Design;
+using Deuteros.Code.Utility;
 
 namespace Deuteros.Code.Platform.Screens
 {
@@ -83,83 +84,99 @@ namespace Deuteros.Code.Platform.Screens
 			//TODO Clicking a product you cannot build still somehow builds it - Not sure this is correct
 			var clickedButton = Buttons.Single(T => T.ObjectData != null && T.ObjectData.Research.ResearchOrder == index);
 
-			if (SelectedButton != null)
+			if (SelectedButton != null && !CurrentFactory.AOC)
 				SelectedButton.Selected = false;
 
 			SelectedButton = clickedButton;
-			SelectedButton.Selected = true;
+
+            if (!CurrentFactory.AOC)
+                SelectedButton.Selected = true;
 
 			CheckProductionStart();
 
 			DrawData();
+			clickedButton.Redraw(false);
 		}
 
 		private void CheckProductionStart()
 		{
-			if (SelectedButton != null)
 			{
-				var addedItem = (Item)SelectedButton.ObjectData;
-
 				//There is no staff
 				if (!CurrentFactory.AOC && (CurrentFactory.Builder == null || CurrentFactory.Builder.Count == 0))
 					return;
 
 				if (!CurrentFactory.AOC)
 				{
-					if (CurrentFactory.CurrentProductionItem() == null || CurrentFactory.CurrentProductionItem().Product.ItemType != addedItem.ItemType)
+					if (SelectedButton != null)
 					{
-						if (CheckResourceAvailable(CurrentPlanet, addedItem, Ground))
+						var addedItem = (Item)SelectedButton.ObjectData;
+
+						if (CurrentFactory.CurrentProductionItem() == null || CurrentFactory.CurrentProductionItem().Product.ItemType != addedItem.ItemType)
 						{
-							if (CurrentFactory.CurrentProductionItem() != null)
+							if (CheckResourceAvailable(CurrentPlanet, addedItem, Ground))
 							{
-								CurrentFactory.CurrentProductionItem().Production_Value = CurrentFactory.CurrentProductionItem().Product.Research.ResearchValue;
-								CurrentFactory.CurrentProductionItem().Active = false;
-							}
+								if (CurrentFactory.CurrentProductionItem() != null)
+								{
+									CurrentFactory.CurrentProductionItem().Production_Value = CurrentFactory.CurrentProductionItem().Product.Research.ResearchValue;
+									CurrentFactory.CurrentProductionItem().Active = false;
+								}
 
-							if (CurrentFactory.ProductionQueue.Any(T => T.Product.ItemType == addedItem.ItemType))
-							{
-								CurrentFactory.ProductionQueue.Single(T => T.Product.ItemType == addedItem.ItemType).Active = true;
-							}
-							else
-							{
-								var newProdItem = new ProductionItem(addedItem);
-								newProdItem.AOCOneTime = false;
-								newProdItem.AOCRepeat = false;
-								newProdItem.Active = true;
-								newProdItem.Production_Value = addedItem.Research.ResearchValue;
-								CurrentFactory.ProductionQueue.Add(newProdItem);
+								if (CurrentFactory.ProductionQueue.Any(T => T.Product.ItemType == addedItem.ItemType))
+								{
+									CurrentFactory.ProductionQueue.Single(T => T.Product.ItemType == addedItem.ItemType).Active = true;
+								}
+								else
+								{
+									var newProdItem = new ProductionItem(addedItem);
+									newProdItem.AOCOneTime = false;
+									newProdItem.AOCRepeat = false;
+									newProdItem.Active = true;
+									newProdItem.Production_Value = addedItem.Research.ResearchValue;
+									CurrentFactory.ProductionQueue.Add(newProdItem);
 
-								RemoveResourceByItem(CurrentPlanet, addedItem, Ground);
+									RemoveResourceByItem(CurrentPlanet, addedItem, Ground);
+								}
 							}
 						}
 					}
 				}
 				else if (CurrentFactory.AOC)
 				{
-					var production = CurrentFactory.ProductionQueue.SingleOrDefault(T => T.Product.ItemType == addedItem.ItemType);
+					if (SelectedButton != null)
+					{
+						var addedItem = (Item)SelectedButton.ObjectData;
+						var production = CurrentFactory.ProductionQueue.SingleOrDefault(T => T.Product.ItemType == addedItem.ItemType);
 
-					if (production == null)
-					{
-						var newProdItem = new ProductionItem(addedItem);
-						newProdItem.AOCOneTime = true;
-						newProdItem.AOCRepeat = false;
-						newProdItem.Production_Value = addedItem.Research.ResearchValue;
+						if (production == null)
+						{
+							var newProdItem = new ProductionItem(addedItem);
+							newProdItem.AOCOneTime = true;
+							newProdItem.AOCRepeat = false;
+							newProdItem.Production_Value = addedItem.Research.ResearchValue;
 
-						CurrentFactory.ProductionQueue.Add(newProdItem);
-					}
-					else if (production.AOCRepeat)
-					{
-						production.AOCRepeat = false;
-						production.AOCOneTime = false;
-					}
-					else if (production.AOCOneTime)
-					{
-						production.AOCRepeat = true;
-						production.AOCOneTime = false;
-					}
-				}
-			}
-		}
+							CurrentFactory.ProductionQueue.Add(newProdItem);
+						}
+						else if (production.AOCOneTime)
+						{
+							production.AOCRepeat = true;
+							production.AOCOneTime = false;
+						}
+						else if (production.AOCRepeat)
+						{
+							if (production.Active)
+							{
+								production.AOCRepeat = false;
+								production.AOCOneTime = false;
+							}
+							else
+							{
+								CurrentFactory.ProductionQueue.Remove(production);
+							}
+						}
+                    }
+                }
+            }
+        }
 
 		protected override void ResearchFinished(Objects.ResearchItem researchItem)
 		{
@@ -239,6 +256,7 @@ namespace Deuteros.Code.Platform.Screens
 				SmallItemImageTextureRect.Texture = null;
 				ItemProgressImageTextureRect = SpriteManager.LoadImageToTextureRect(ProductionProgressSpriteBasePath + "idle.png", ItemProgressImageTextureRect);
 			}
+
 		}
 
 		#region Statics
@@ -258,7 +276,18 @@ namespace Deuteros.Code.Platform.Screens
 				{
 					if (currentFactory != null)
 					{
-						currentFactory.IncrementCurrentProd();
+                        if (currentFactory.CurrentProductionItem() == null && currentFactory.AOC)
+                        {
+                            var productionItem = currentFactory.ProductionQueue.FirstOrDefault(T => CheckResourceAvailable(currentPlanet, T.Product, currentFactory.Ground)); ;
+
+							if (productionItem != null)
+							{
+                                RemoveResourceByItem(currentPlanet, productionItem.Product, currentFactory.Ground);
+                                productionItem.Active = true;
+							}
+                        }
+
+                        currentFactory.IncrementCurrentProd();
 
 						if (currentFactory.CurrentProductionItem() != null)
 						{
@@ -268,7 +297,7 @@ namespace Deuteros.Code.Platform.Screens
 
 								currentPlanet.AddItems(currentFactory.CurrentProductionItem().Product.ItemType, 1);
 
-								currentFactory.Builder.ActionsTaken++;
+                                if (!currentFactory.AOC) currentFactory.Builder.ActionsTaken++;
 								currentFactory.ProdCycle = 0;
 
 								GameCore.SingletonInstance.TriggerProductionFinished(currentFactory);
@@ -284,7 +313,7 @@ namespace Deuteros.Code.Platform.Screens
 
 									currentFactory.ProductionQueue.Remove(currentFactory.CurrentProductionItem());
 								}
-								else if (currentFactory.ProductionQueue.Any(T => T.AOCRepeat))
+								/*else if (currentFactory.ProductionQueue.Any(T => T.AOCRepeat))
 								{
 									var currentResearchOrder = currentFactory.CurrentProductionItem().Product.Research.ResearchOrder;
 
@@ -300,8 +329,26 @@ namespace Deuteros.Code.Platform.Screens
 
 										RemoveResourceByItem(currentPlanet, currentFactory.CurrentProductionItem().Product, currentFactory.Ground);
 									}
-								}
-							}
+								}*/
+								else if (currentFactory.CurrentProductionItem().AOCRepeat)
+								{
+									var nextItem = currentFactory.ProductionQueue.FirstOrDefault(T => T != currentFactory.CurrentProductionItem() && (CheckResourceAvailable(currentPlanet, T.Product, currentFactory.Ground)));
+									var currItem = currentFactory.CurrentProductionItem();
+									currItem.Active = false;
+									currItem.Production_Complete = 1;
+                                    currItem.Production_Value = currItem.Product.Research.ResearchValue;
+
+									if (nextItem != null)
+									{
+										RemoveResourceByItem(currentPlanet, nextItem.Product, currentFactory.Ground);
+										nextItem.Active = true;
+									}
+                                }
+								else
+								{
+                                    currentFactory.ProductionQueue.Remove(currentFactory.CurrentProductionItem());
+                                }
+                            }
 						}
 
 						foreach (var autoProduced in GameCore.SingletonInstance.GameData.GetAllActiveItems().Where(T => T.AutoProduce))

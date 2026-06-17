@@ -55,6 +55,10 @@ namespace Deuteros.Code.Platform
                 {
                     AnimationState = Enums.SidePanel_Button_State_Animations.Static_Green;
                 }
+                else if (!ObjectData.Research.Locked)
+                {
+                    AnimationState = Enums.SidePanel_Button_State_Animations.Static_Red;
+                }
                 else
                 {
                     AnimationState = Enums.SidePanel_Button_State_Animations.Static_Locked;
