@@ -450,13 +450,13 @@ namespace Deuteros.Code
 					}
 				}
 
-				if (_currentScreen.GetType() == typeof(ShipBay) || _currentScreen.GetType() == typeof(GroundMaterials) || _currentScreen.GetType() == typeof(Deuteros.Code.Platform.Screens.Store))
+				if ((_currentScreen.GetType() == typeof(ShipBay) || _currentScreen.GetType() == typeof(GroundMaterials) || _currentScreen.GetType() == typeof(Deuteros.Code.Platform.Screens.Store)) && !sceneVariables.Contains(Enums.SceneVariables.Orbit))
 				{
-					_menuScreen.Location.Text = GetCurrentPlanet().PlanetId.ToString() + " colony";
+					_menuScreen.Location.Text = GetCurrentPlanet().PlanetId.ToScreenString(" ") + " colony";
 				}
 				else
 				{
-					_menuScreen.Location.Text = GetCurrentPlanet().PlanetId.ToString() + " orbital";
+					_menuScreen.Location.Text = GetCurrentPlanet().PlanetId.ToScreenString(" ") + " orbital";
 				}
 
 				_menuScreen.Star.Text = GetCurrentPlanet().ParentStar.ToScreenString();

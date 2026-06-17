@@ -230,8 +230,8 @@ namespace Deuteros.Code.Platform.Screens
 						{
 							enemyShip = new IOS();
 							//pull upto 200 drones from the planet store
-							enemyShip.DroneCount = Math.Min(200, GameCore.SingletonInstance.GameData.ActiveSaveFile.BaseGameData.Planets[Ship.PlanetLocation].PlanetResources.Stores[ItemTypes.ios_drone]);
-							GameCore.SingletonInstance.GameData.ActiveSaveFile.BaseGameData.Planets[Ship.PlanetLocation].PlanetResources.Stores[ItemTypes.ios_drone] -= enemyShip.DroneCount;
+							enemyShip.DroneCount = Math.Min(200, GameCore.SingletonInstance.GameData.ActiveSaveFile.BaseGameData.Planets[Ship.PlanetLocation].Station.Resources.Stores[ItemTypes.ios_drone]);
+							GameCore.SingletonInstance.GameData.ActiveSaveFile.BaseGameData.Planets[Ship.PlanetLocation].Station.Resources.Stores[ItemTypes.ios_drone] -= enemyShip.DroneCount;
 						}
 						else
 						{
@@ -243,7 +243,7 @@ namespace Deuteros.Code.Platform.Screens
 						if (GameCore.SingletonInstance.GameData.ActiveSaveFile.BaseGameData.Planets[Ship.PlanetLocation].ActiveMethanoid)
 						{
 							//move remaining drones back to store
-							GameCore.SingletonInstance.GameData.ActiveSaveFile.BaseGameData.Planets[Ship.PlanetLocation].PlanetResources.Stores[ItemTypes.ios_drone] += enemyShip.DroneCount;
+							GameCore.SingletonInstance.GameData.ActiveSaveFile.BaseGameData.Planets[Ship.PlanetLocation].Station.Resources.Stores[ItemTypes.ios_drone] += enemyShip.DroneCount;
 						}
                         else
                         {
@@ -286,7 +286,10 @@ namespace Deuteros.Code.Platform.Screens
 					{
 						if (Ship.Pilot != null) Ship.Pilot.ActionsTaken++;
 
-						CurrentPlanet.Station.BuildParts++;
+						if (CurrentPlanet.Station.BuildParts == 0)
+							CurrentPlanet.Station.StationOrdinal = GameCore.SingletonInstance.GameData.ActiveSaveFile.BaseGameData.Planets.Values.Where(p => !p.ActiveMethanoid && p.Station != null).MaxBy(p => p.Station.StationOrdinal).Station.StationOrdinal + 1;
+
+                        CurrentPlanet.Station.BuildParts++;
 
 						if (CurrentPlanet.Station.BuildParts == 8)
 							await ShowModuleTextFrame(GameCore.SingletonInstance.GameData.ActiveSaveFile.BaseGameData.ModuleFrameTexts[Enums.ModuleFrameText.Station_Deploy_Complete], new List<string>() { CurrentPlanet.Station.BuildParts.ToString() }, (modulePressed + 1));
@@ -428,8 +431,12 @@ namespace Deuteros.Code.Platform.Screens
 					GameCore.SingletonInstance.GameData.ActiveSaveFile.AtWar &&
 					GameCore.SingletonInstance.GameData.ActiveSaveFile.BaseGameData.Planets[Ship.PlanetLocation].ActiveMethanoid)
 				{
-                    GameCore.SingletonInstance.GameData.ActiveSaveFile.BaseGameData.Planets[Ship.PlanetLocation].ActiveMethanoid = false;
-				}
+					var planet = GameCore.SingletonInstance.GameData.ActiveSaveFile.BaseGameData.Planets[Ship.PlanetLocation];
+
+					planet.ActiveMethanoid = false;
+					planet.Station.StationOrdinal = GameCore.SingletonInstance.GameData.ActiveSaveFile.BaseGameData.Planets.Values.Where(p => p != planet && !p.ActiveMethanoid && p.Station != null).MaxBy(p => p.Station.StationOrdinal).Station.StationOrdinal + 1;
+
+                }
 
                 Ship.Dock();
 				UpdateState();
@@ -883,7 +890,7 @@ namespace Deuteros.Code.Platform.Screens
 							ship.DestinationStarLocation = tempDestStar;
 
 							ship.ACC?.Update(Ship_States.InTransit);
-						}
+						}	
 					}
 					else if (ship.ShipState == Ship_States.Docking)
 					{

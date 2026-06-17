@@ -54,9 +54,9 @@ namespace Deuteros.Code.Utility
 
                 if (createdButton2 is ButtonType typedButton2)
                 {
-                    if (objectDataList.ContainsKey(i + 16))
+                    if ((i + 16) <= objectDataList.Count())
                     {
-                        typedButton2.ObjectData = objectDataList[i + 16];
+                        typedButton2.ObjectData = objectDataList.ElementAt(i+15).Value;
                         typedButton2.Connect("Clicked", new Callable(referenceScene, clickedEventName));
                     }
                     createdButtons.Add(typedButton2);

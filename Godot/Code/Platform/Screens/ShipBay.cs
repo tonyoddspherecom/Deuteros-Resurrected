@@ -274,7 +274,7 @@ namespace Deuteros.Code.Platform.Screens
 				newShuttle.PlanetLocation = CurrentPlanet.PlanetId;
 				newShuttle.ShipType = Enums.Ship_Types.Shuttle;
 				newShuttle.LocationView = false;
-				newShuttle.Name = "Shuttle Craft";
+				newShuttle.Name = CurrentPlanet.PlanetId.ToScreenString()+" Shuttle";
 
 				GameCore.SingletonInstance.GameData.ActiveSaveFile.Ships.Add(newShuttle);
 
@@ -825,6 +825,9 @@ namespace Deuteros.Code.Platform.Screens
 
 			for (int i = 0; i < 11; i++)
 			{
+				EquipmentStockNameLabels[i].RemoveThemeColorOverride("font_color");
+                EquipmentStockCountLabels[i].RemoveThemeColorOverride("font_color");
+
 				if (equipmentList.Count() > i)
 				{
 					EquipmentStockNameLabels[i].Visible = true;

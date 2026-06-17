@@ -15,6 +15,7 @@ using System.Runtime.Intrinsics.X86;
 using System.Security;
 using System.Threading.Tasks;
 using static Deuteros.Code.Enums;
+using static System.Collections.Specialized.BitVector32;
 
 public partial class Overview : BaseSubScene
 {
@@ -56,11 +57,12 @@ public partial class Overview : BaseSubScene
 
 	private void Station_Pressed(int buttonPressed)
 	{
-		var stationList = Deuteros.Code.GameCore.SingletonInstance.GameData.ActiveSaveFile.BaseGameData.Planets.Values.Select(p => p.Station).Where(s => s.BuildParts > 0).ToList();
+		//var planet = Deuteros.Code.GameCore.SingletonInstance.GameData.ActiveSaveFile.BaseGameData.Planets[(StellarBodies)Enum.Parse(typeof(StellarBodies),StationButtons[buttonPressed].GetMeta("planetid").ToString())];
+        var planet = Deuteros.Code.GameCore.SingletonInstance.GameData.ActiveSaveFile.BaseGameData.Planets[(StellarBodies)StationButtons[buttonPressed].GetMeta("planetid").AsInt32()];
 
-		if (!stationList[buttonPressed].Built) return;
+        if (!planet.Station.Built) return;
 
-		GameCore.SingletonInstance.GameData.ActiveSaveFile.CurrentPlanet = stationList[buttonPressed].PlanetId;
+		GameCore.SingletonInstance.GameData.ActiveSaveFile.CurrentPlanet = planet.PlanetId;
 
 		var sceneVariables = new List<SceneVariables>();
 		sceneVariables.Add(Enums.SceneVariables.Orbit);
@@ -72,12 +74,11 @@ public partial class Overview : BaseSubScene
 	private void IOS_Pressed(int buttonPressed)
 	{
 		//show ios
-		var iosList = Deuteros.Code.GameCore.SingletonInstance.GameData.ActiveSaveFile.Ships.Where(T => T.ShipType == Ship_Types.IOS).ToList();
 
-		GameCore.SingletonInstance.ShipSelected = iosList[buttonPressed].ShipID;
-		GameCore.SingletonInstance.GameData.ActiveSaveFile.CurrentPlanet = iosList[buttonPressed].PlanetLocation;
+        GameCore.SingletonInstance.ShipSelected = Guid.Parse(IOSButtons[buttonPressed].GetMeta("shipid").ToString());
+		GameCore.SingletonInstance.GameData.ActiveSaveFile.CurrentPlanet = GameCore.SingletonInstance.GameData.ActiveSaveFile.Ships.Single<IShip>(s => s.ShipID == GameCore.SingletonInstance.ShipSelected).PlanetLocation;
 
-		var sceneVariables = new List<SceneVariables>();
+        var sceneVariables = new List<SceneVariables>();
 		sceneVariables.Add(Enums.SceneVariables.Orbit);
 
 		//Underscores in scene names represent a folder
@@ -86,14 +87,13 @@ public partial class Overview : BaseSubScene
 
 	private void SCG_Pressed(int buttonPressed)
 	{
-		//show scg
-		var scgList = Deuteros.Code.GameCore.SingletonInstance.GameData.ActiveSaveFile.Ships.Where(T => T.ShipType == Ship_Types.SCG).ToList();
+        //show scg
+        GameCore.SingletonInstance.ShipSelected = Guid.Parse(SCGButtons[buttonPressed].GetMeta("shipid").ToString());
+		GameCore.SingletonInstance.GameData.ActiveSaveFile.CurrentPlanet = GameCore.SingletonInstance.GameData.ActiveSaveFile.Ships.Single<IShip>(s => s.ShipID == GameCore.SingletonInstance.ShipSelected).PlanetLocation;
 
-		GameCore.SingletonInstance.ShipSelected = scgList[buttonPressed].ShipID;
-		GameCore.SingletonInstance.GameData.ActiveSaveFile.CurrentPlanet = scgList[buttonPressed].PlanetLocation;
 
-		//Underscores in scene names represent a folder
-		Deuteros.Code.GameCore.SingletonInstance.ChangeScene(Enums.Scenes.ShipInterior, new List<SceneVariables>());
+        //Underscores in scene names represent a folder
+        Deuteros.Code.GameCore.SingletonInstance.ChangeScene(Enums.Scenes.ShipInterior, new List<SceneVariables>());
 	}
 
 
@@ -105,7 +105,7 @@ public partial class Overview : BaseSubScene
 	
 	private void UpdateState()
 	{
-		var stationList = Deuteros.Code.GameCore.SingletonInstance.GameData.ActiveSaveFile.BaseGameData.Planets.Values.Select(p => p.Station).Where(s => s.BuildParts > 0).ToList();
+		var stationList = Deuteros.Code.GameCore.SingletonInstance.GameData.ActiveSaveFile.BaseGameData.Planets.Values.Select(p => p.Station).Where(s => s.BuildParts > 0).OrderBy(s => s.StationOrdinal).ToList();
 		var iosList = Deuteros.Code.GameCore.SingletonInstance.GameData.ActiveSaveFile.Ships.Where(T => T.ShipType == Ship_Types.IOS).ToList();
 		var scgList = Deuteros.Code.GameCore.SingletonInstance.GameData.ActiveSaveFile.Ships.Where(T => T.ShipType == Ship_Types.SCG).ToList();
 
@@ -119,14 +119,16 @@ public partial class Overview : BaseSubScene
 
 		foreach (var station in stationList)
 		{
-			var curStationButton = StationButtons[stationCount];
+			var curStationButton = StationButtons[((stationCount & 1) * 8)+(stationCount >> 1)];
 
 			if (!GameCore.SingletonInstance.GameData.ActiveSaveFile.BaseGameData.Planets[station.PlanetId].ActiveMethanoid)
 			{
 
 				curStationButton.Visible = true;
+				curStationButton.SetMeta("planetid",Variant.From<int>((Int32)station.PlanetId));
 
-				if (!station.Built)
+
+                if (!station.Built)
 					curStationButton.TextureNormal = SpriteManager.LoadImage(SpriteBasePath + "Station_UnderConstruction.png");
 				else
 					curStationButton.TextureNormal = SpriteManager.LoadImage(SpriteBasePath + "Station_" + Math.Floor((decimal)(station.Factory.ProdCycle / 2)) + ".png");
@@ -137,11 +139,12 @@ public partial class Overview : BaseSubScene
 
 		foreach (InterStellarShip ios in iosList)
 		{
-			var curIOSButton = IOSButtons[iosCount];
+			var curIOSButton = IOSButtons[((iosCount & 1) * 8) + (iosCount >> 1)];
 
-			curIOSButton.Visible = true;
+            curIOSButton.Visible = true;
+            curIOSButton.SetMeta("shipid", ios.ShipID.ToString());
 
-			if (ios.ShipState == Ship_States.Docking)
+            if (ios.ShipState == Ship_States.Docking)
 				curIOSButton.TextureNormal = SpriteManager.LoadImage(SpriteBasePath + "Ship_Docking.png");
 			else if(ios.ShipState == Ship_States.Launching)
 				curIOSButton.TextureNormal = SpriteManager.LoadImage(SpriteBasePath + "Ship_Launching.png");
@@ -165,11 +168,12 @@ public partial class Overview : BaseSubScene
 
 		foreach (InterStellarShip scg in scgList)
 		{
-			var curSCGButton = SCGButtons[scgCount];
+			var curSCGButton = SCGButtons[((scgCount & 1) * 8) + (scgCount >> 1)];
 
-			curSCGButton.Visible = true;
+            curSCGButton.Visible = true;
+            curSCGButton.SetMeta("shipid", scg.ShipID.ToString());
 
-			if (scg.ShipState == Ship_States.Docking)
+            if (scg.ShipState == Ship_States.Docking)
 				curSCGButton.TextureNormal = SpriteManager.LoadImage(SpriteBasePath + "Ship_Docking.png");
 			else if (scg.ShipState == Ship_States.Launching)
 				curSCGButton.TextureNormal = SpriteManager.LoadImage(SpriteBasePath + "Ship_Launching.png");

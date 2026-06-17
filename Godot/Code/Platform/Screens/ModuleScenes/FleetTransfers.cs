@@ -49,11 +49,11 @@ public partial class FleetTransfers : BaseSubScene
 
 		if (_player is IOS)
 		{
-			drones = p.PlanetResources.Stores[Enums.ItemTypes.ios_drone];
+			drones = p.Station.Resources.Stores[Enums.ItemTypes.ios_drone];
 		}
 		else if (_player is SCG)
 		{
-			drones = p.PlanetResources.Stores[Enums.ItemTypes.ios_drone];
+			drones = p.Station.Resources.Stores[Enums.ItemTypes.ios_drone];
 		}
 
 		OrbitalDronePoolLabel.Text = " Orbital\n  Drone\n  Pool\n  " + drones;
@@ -76,10 +76,10 @@ public partial class FleetTransfers : BaseSubScene
 			droneType = Enums.ItemTypes.star_drone;
 		}
 
-		if (p.PlanetResources.Stores[droneType] > 0 && _player.DroneCount < 200)
+		if (p.Station.Resources.Stores[droneType] > 0 && _player.DroneCount < 200)
 		{
 			_player.DroneCount++;
-			p.PlanetResources.Stores[droneType]--;
+			p.Station.Resources.Stores[droneType]--;
 			updatePoolLabels();
 		}
 	}
@@ -92,11 +92,11 @@ public partial class FleetTransfers : BaseSubScene
 			_player.DroneCount--;
 			if (_player is IOS)
 			{
-				p.PlanetResources.Stores[Enums.ItemTypes.ios_drone]++;
+				p.Station.Resources.Stores[Enums.ItemTypes.ios_drone]++;
 			}
 			else if (_player is SCG)
 			{
-				p.PlanetResources.Stores[Enums.ItemTypes.star_drone]++;
+				p.Station.Resources.Stores[Enums.ItemTypes.star_drone]++;
 			}
 			updatePoolLabels();
 		}

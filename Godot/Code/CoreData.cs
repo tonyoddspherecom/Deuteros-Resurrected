@@ -498,7 +498,7 @@ namespace Deuteros.Code
 				shuttlechas.ShortName = "S Chassis";
 				shuttlechas.ItemCategory = Enums.ItemCategory.item;
 				shuttlechas.ItemType = Enums.ItemTypes.s_chassis;
-				shuttlechas.Mass = 130;
+                shuttlechas.Mass = 130;
 
 				shuttlechas.Research = new ResearchItem(Enums.ItemTypes.s_chassis, 3, 1);
 				shuttlechas.Research.Locked = false;
@@ -519,7 +519,7 @@ namespace Deuteros.Code
 				shuttledrive.ShortName = "S Drive";
 				shuttledrive.ItemCategory = Enums.ItemCategory.item;
 				shuttledrive.ItemType = Enums.ItemTypes.s_drive;
-				shuttledrive.Mass = 20;
+                shuttledrive.Mass = 20;
 
 				shuttledrive.Research = new ResearchItem(Enums.ItemTypes.s_drive, 4, 1);
 				shuttledrive.Research.Locked = false;
@@ -623,7 +623,7 @@ namespace Deuteros.Code
 				pulseLaser.ItemType = Enums.ItemTypes.pulse_blaster_laser;
 				pulseLaser.Mass = 750;
 
-				pulseLaser.Research = new ResearchItem(Enums.ItemTypes.pulse_blaster_laser, 10, 3);
+                pulseLaser.Research = new ResearchItem(Enums.ItemTypes.pulse_blaster_laser, 10, 3);
 
 				pulseLaser.Locked = true;
 				pulseLaser.OrbitOnly = true;
@@ -641,7 +641,7 @@ namespace Deuteros.Code
 				iChassis.ItemType = Enums.ItemTypes.i_chassis;
 				iChassis.Mass = 650;
 
-				iChassis.Research = new ResearchItem(Enums.ItemTypes.i_chassis, 11, 2);
+                iChassis.Research = new ResearchItem(Enums.ItemTypes.i_chassis, 11, 2);
 
 				iChassis.Locked = true;
 				iChassis.OrbitOnly = true;
@@ -661,7 +661,8 @@ namespace Deuteros.Code
 				iDrive.ItemType = Enums.ItemTypes.i_drive;
 				iDrive.Mass = 95;
 
-				iDrive.Research = new ResearchItem(Enums.ItemTypes.i_drive, 12, 2);
+
+                iDrive.Research = new ResearchItem(Enums.ItemTypes.i_drive, 12, 2);
 
 				iDrive.Locked = true;
 				iDrive.OrbitOnly = true;
@@ -678,7 +679,7 @@ namespace Deuteros.Code
 				gChassis.ItemType = Enums.ItemTypes.g_chassis;
 				gChassis.Mass = 1685;
 
-				gChassis.Research = new ResearchItem(Enums.ItemTypes.g_chassis, 13, 3);
+                gChassis.Research = new ResearchItem(Enums.ItemTypes.g_chassis, 13, 3);
 
 				gChassis.Locked = true;
 				gChassis.OrbitOnly = true;
@@ -699,7 +700,7 @@ namespace Deuteros.Code
 				starDrive.ItemType = Enums.ItemTypes.star_drive;
 				starDrive.Mass = 265;
 
-				starDrive.Research = new ResearchItem(Enums.ItemTypes.star_drive, 14, 3);
+                starDrive.Research = new ResearchItem(Enums.ItemTypes.star_drive, 14, 3);
 
 				starDrive.Locked = true;
 				starDrive.OrbitOnly = true;
@@ -720,6 +721,7 @@ namespace Deuteros.Code
 				acc.ItemType = Enums.ItemTypes.a__c__c;
 				acc.Mass = 8;
 				acc.ToolPod = true;
+				acc.ToolPodSingular = true;
 
 				acc.Research = new ResearchItem(Enums.ItemTypes.a__c__c, 16, 3);
 
@@ -759,6 +761,7 @@ namespace Deuteros.Code
 				BandAid.ItemType = Enums.ItemTypes.bandaid;
 				BandAid.Mass = 150;
 				BandAid.ToolPod = true;
+				BandAid.ToolPodSingular = true;
 
 				BandAid.Research = new ResearchItem(Enums.ItemTypes.bandaid, 18, 3);
 
@@ -799,8 +802,9 @@ namespace Deuteros.Code
 				HydraulicGrapple.ItemType = Enums.ItemTypes.grapple;
 				HydraulicGrapple.Mass = 5;
 				HydraulicGrapple.ToolPod = true;
+                HydraulicGrapple.ToolPodSingular = true;
 
-				HydraulicGrapple.Research = new ResearchItem(Enums.ItemTypes.grapple, 20, 3);
+                HydraulicGrapple.Research = new ResearchItem(Enums.ItemTypes.grapple, 20, 3);
 
 				HydraulicGrapple.Locked = true;
 				HydraulicGrapple.OrbitOnly = true;
@@ -818,6 +822,7 @@ namespace Deuteros.Code
 				DFCC.ItemType = Enums.ItemTypes.d__f__c__c;
 				DFCC.Mass = 8;
 				DFCC.ToolPod = true;
+				DFCC.ToolPodSingular = true;
 
 				DFCC.Research = new ResearchItem(Enums.ItemTypes.d__f__c__c, 21, 3);
 
@@ -840,6 +845,7 @@ namespace Deuteros.Code
 				AMA.ItemType = Enums.ItemTypes.a__m__a;
 				AMA.Mass = 124;
 				AMA.ToolPod = true;
+				AMA.ToolPodSingular = true;
 
 				AMA.Research = new ResearchItem(Enums.ItemTypes.a__m__a, 22, 3);
 
@@ -915,6 +921,7 @@ namespace Deuteros.Code
 				RFrame.ItemType = Enums.ItemTypes.r_frame;
 				RFrame.Mass = 200;
 				RFrame.ToolPod = true;
+				RFrame.ToolPodSingular = true;
 
 				RFrame.Research = new ResearchItem(Enums.ItemTypes.r_frame, 26, 3);
 
@@ -957,6 +964,7 @@ namespace Deuteros.Code
 				COMMSPOD.ItemType = Enums.ItemTypes.commspod;
 				COMMSPOD.Mass = 5;
 				COMMSPOD.ToolPod = true;
+				COMMSPOD.ToolPodSingular = true;
 
 				COMMSPOD.Research = new ResearchItem(Enums.ItemTypes.commspod, 28, 3);
 
@@ -1022,6 +1030,7 @@ namespace Deuteros.Code
 				PrisonPod.ItemType = Enums.ItemTypes.prison_pod;
 				PrisonPod.Mass = 7;
 				PrisonPod.ToolPod = true;
+				PrisonPod.ToolPodSingular = true;
 
 				PrisonPod.Research = new ResearchItem(Enums.ItemTypes.prison_pod, 31, 3);
 
@@ -1042,6 +1051,7 @@ namespace Deuteros.Code
 				SonicBlaster.ItemType = Enums.ItemTypes.sonic_blaster;
 				SonicBlaster.Mass = 1065;
 				SonicBlaster.ToolPod = true;
+				SonicBlaster.ToolPodSingular = true;
 
 				SonicBlaster.Research = new ResearchItem(Enums.ItemTypes.sonic_blaster, 32, 3);
 
