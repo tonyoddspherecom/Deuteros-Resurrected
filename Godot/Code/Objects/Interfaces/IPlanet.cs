@@ -7,6 +7,8 @@ namespace Deuteros.Code.Objects.Interfaces
     {
         PlanetResource PlanetResources { get; set; }
         bool IsMoon { get; set; }
+
+        int MethanoidAttackedCount { get; set; }
         bool ActiveMethanoid { get; set; }
         SpaceStation Station { get; set; }
         Enums.StellarBodies PlanetId { get; set; }

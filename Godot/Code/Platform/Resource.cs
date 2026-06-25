@@ -49,7 +49,14 @@ namespace Deuteros.Code.Platform
 
             throw new InvalidOperationException("Staff to replace was not found in array.");
         }
-
+        public void RemoveAllStaff()
+        {
+            for (int i = 0; i < Staff.Length; i++)
+            {
+                Staff[i] = null;
+            }
+        }
+                
         public void RemoveStaff(Staff staff)
         {
             for (int i = 0; i < Staff.Length; i++)

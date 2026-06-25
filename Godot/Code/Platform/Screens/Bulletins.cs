@@ -13,36 +13,36 @@ using static Deuteros.Code.Enums;
 
 public partial class Bulletins : BaseSubScene
 {
-    RichTextLabel BulletinLabel { get; set; }
+	RichTextLabel BulletinLabel { get; set; }
 
-    AudioStreamPlayer TypeSound { get; set; }
-    public int LetterDelayMs { get; set; }
+	AudioStreamPlayer TypeSound { get; set; }
+	public int LetterDelayMs { get; set; }
 
-    // Called when the node enters the scene tree for the first time.
-    public override void _Ready()
-    {
-        LetterDelayMs = 75;
+	// Called when the node enters the scene tree for the first time.
+	public override void _Ready()
+	{
+		LetterDelayMs = 75;
 
-        BulletinLabel = GetNode<RichTextLabel>("Labels/BulletinLabel");
-        TypeSound = GetNode<AudioStreamPlayer>("TypeSound");
+		BulletinLabel = GetNode<RichTextLabel>("Labels/BulletinLabel");
+		TypeSound = GetNode<AudioStreamPlayer>("TypeSound");
 
-        base._Ready();
-    }
+		base._Ready();
+	}
 
-    // Called every frame. 'delta' is the elapsed time since the previous frame.
-    public override void _Process(double delta)
-    {
-    }
+	// Called every frame. 'delta' is the elapsed time since the previous frame.
+	public override void _Process(double delta)
+	{
+	}
 
-    private async Task TypeText(RichTextLabel label, string fullText)
-    {
-        GameCore.LockScreen();
-        label.Text = "";
+	private async Task TypeText(RichTextLabel label, string fullText)
+	{
+		GameCore.LockScreen();
+		label.Text = "";
 
-        for (int i = 0; i < fullText.Length; i++)
-        {
+		for (int i = 0; i < fullText.Length; i++)
+		{
 			//Instantly print and skip color tags
-            if (fullText[i] == '[' && (fullText.Substring(i, 6) == "[color" || fullText.Substring(i, 7) == "[/color"))
+			if (fullText[i] == '[' && (fullText.Substring(i, 6) == "[color" || fullText.Substring(i, 7) == "[/color"))
 			{
 				label.Text += fullText.Substring(i, fullText.IndexOf("]", i) + 1 - i);
 
@@ -53,36 +53,38 @@ public partial class Bulletins : BaseSubScene
 
 			label.Text += fullText[i];
 
-            // Optional: don't blip on spaces
-            if (fullText[i] != ' ' && TypeSound != null)
-            {
-                TypeSound.Stop(); // restarts the sound cleanly
-                TypeSound.Play();
-            }
+			// Optional: don't blip on spaces
+			if (fullText[i] != ' ' && TypeSound != null)
+			{
+				TypeSound.Stop(); // restarts the sound cleanly
+				TypeSound.Play();
+			}
 
-            await WaitMs(LetterDelayMs);
-        }
-        GameCore.UnLockScreen();
-    }
+			await WaitMs(LetterDelayMs);
+		}
+		GameCore.UnLockScreen();
+	}
 
-    private async Task WaitMs(int ms)
-    {
-        await ToSignal(
-            GetTree().CreateTimer(ms / 1000.0),
-            SceneTreeTimer.SignalName.Timeout
-        );
-    }
+	private async Task WaitMs(int ms)
+	{
+		await ToSignal(
+			GetTree().CreateTimer(ms / 1000.0),
+			SceneTreeTimer.SignalName.Timeout
+		);
+	}
 
-    public async void DisplayBulletin(BulletinTypes bulletin)
-    {
-        string bulletinText = GameCore.SingletonInstance.GameData.ActiveSaveFile.BaseGameData.BulletinTexts[bulletin].BulletinText;
+	public async void DisplayBulletin(BulletinTypes bulletin)
+	{
+		string bulletinText = GameCore.SingletonInstance.GameData.ActiveSaveFile.BaseGameData.BulletinTexts[bulletin].BulletinText;
 
-        bulletinText = "[color=ff0000]Special Bulletin.[/color]\r\n" +
-            "From: \r\n" +
-            GameCore.Earth.ResearchStaff.Leader + "\r\n" +
-            "Head of research.\r\n \r\n" + bulletinText + "\r\n \r\nMessage ends.";
-        await TypeText(BulletinLabel, bulletinText);
-    }
+		GameCore.SingletonInstance.GameData.ActiveSaveFile.TimeSkip = false;
+
+		bulletinText = "[color=ff0000]Special Bulletin.[/color]\r\n" +
+			"From: \r\n" +
+			GameCore.Earth.ResearchStaff.Leader + "\r\n" +
+			"Head of research.\r\n \r\n" + bulletinText + "\r\n \r\nMessage ends.";
+		await TypeText(BulletinLabel, bulletinText);
+	}
 }
 
 /*

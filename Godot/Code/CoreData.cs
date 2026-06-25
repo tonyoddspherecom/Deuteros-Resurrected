@@ -35,7 +35,18 @@ namespace Deuteros.Code
 			return ActiveSaveFile.BaseGameData.ItemList.Where(T => T.Locked == false && (T.Research == null || T.Research.Researched));
 		}
 
-		public static SaveFile CreateNewSaveFile()
+        public bool PlanetUnderAttack(Enums.StellarBodies planet)
+        {
+            EnemyFleet enemyFleet = (EnemyFleet)GameCore.SingletonInstance.GameData.ActiveSaveFile.Ships.FirstOrDefault(s => s.ShipType != Enums.Ship_Types.Shuttle && ((InterStellarShip)s).MethanoidOwned && ((InterStellarShip)s).PlanetLocation == planet);
+
+            if (enemyFleet != null)
+            {
+				return enemyFleet.Attacking;
+            }
+            return false;
+        }
+
+        public static SaveFile CreateNewSaveFile()
 		{
 			var newGameSave = new SaveFile();
 			newGameSave.BaseGameData = StaticGameData;
@@ -51,7 +62,63 @@ namespace Deuteros.Code
 			newGameSave.GameConfig.IOSRefuelThreshold = 200;
 			newGameSave.NextPersonIndex = Random.Shared.Next(StaticGameData.PersonNames.Count() + 1);
 
-			return newGameSave;
+            //create enemy fleets used to attack the player
+            foreach (var star in StaticGameData.Stars.Keys)
+            {
+                var enemyFleet = new EnemyFleet();
+
+                switch (star)
+                {
+                    case Enums.StellarBodies.the_sun:
+                        enemyFleet.AttackTrigger = 40;
+                        break;
+
+                    case Enums.StellarBodies.proxima:
+                        enemyFleet.AttackTrigger = 100;
+                        break;
+
+                    case Enums.StellarBodies.centauri:
+                        enemyFleet.AttackTrigger = 150;
+                        break;
+                    case Enums.StellarBodies.barnard:
+                        enemyFleet.AttackTrigger = 175;
+                        break;
+                    case Enums.StellarBodies.lalande:
+                    case Enums.StellarBodies.sirius:
+                        enemyFleet.AttackTrigger = 190;
+                        break;
+
+                    case Enums.StellarBodies.cygni:
+                        enemyFleet.AttackTrigger = 195;
+                        break;
+
+                    case Enums.StellarBodies.procyon:
+                        enemyFleet.AttackTrigger = 200;
+                        break;
+
+                    case Enums.StellarBodies.tau_ceti:
+                        enemyFleet.AttackTrigger = 200;
+                        break;
+
+                }
+
+                enemyFleet.MethanoidOwned = true;
+                if (star == StellarBodies.the_sun)
+                    enemyFleet.PlanetLocation = StellarBodies.jupiter;
+                else
+                    //pick a random methanoid planet for now
+                    //not sure what the correct behaviour is
+                    enemyFleet.PlanetLocation = newGameSave.BaseGameData.Planets.Values.First(p => p.ParentStar == star && p.ActiveMethanoid).PlanetId;
+
+                enemyFleet.StarLocation = star;
+                enemyFleet.Pilot = new Staff();
+
+                //make pilot an admiral
+                enemyFleet.Pilot.ActionsTaken = 50;
+                newGameSave.Ships.Add(enemyFleet);
+            }
+
+            return newGameSave;
 		}
 
 		public static void CreateBaseGameData()
@@ -1252,9 +1319,9 @@ namespace Deuteros.Code
 
 				StaticGameData.ItemList.Add(hedFuel);
 
-				#endregion
+                #endregion
 
-				#endregion
+                #endregion
 
 
 				StaticGameData.Stars.Add(Enums.StellarBodies.the_sun, new Objects.Star(Enums.StellarBodies.the_sun)
@@ -1265,42 +1332,42 @@ namespace Deuteros.Code
 				StaticGameData.Stars.Add(Enums.StellarBodies.proxima, new Objects.Star(Enums.StellarBodies.proxima)
 				{
 					PlanetDistanceList = new List<int> { 49, 63, 146, 158 }
-				});
+                });
 
 				StaticGameData.Stars.Add(Enums.StellarBodies.centauri, new Objects.Star(Enums.StellarBodies.centauri)
 				{
 					PlanetDistanceList = new List<int> { 37, 43, 82, 94, 132, 140, 162, 174 }
-				});
+                });
 
 				StaticGameData.Stars.Add(Enums.StellarBodies.barnard, new Objects.Star(Enums.StellarBodies.barnard)
 				{
 					PlanetDistanceList = new List<int> { 37, 41, 53, 59, 68, 76, 114, 126, 133, 139, 144, 160, 196, 204 }
-				});
+                });
 
 				StaticGameData.Stars.Add(Enums.StellarBodies.lalande, new Objects.Star(Enums.StellarBodies.lalande)
 				{
 					PlanetDistanceList = new List<int> { 50, 62, 81, 95 }
-				});
+                });
 
 				StaticGameData.Stars.Add(Enums.StellarBodies.sirius, new Objects.Star(Enums.StellarBodies.sirius)
 				{
 					PlanetDistanceList = new List<int> { 52, 60, 68, 76 }
-				});
+                });
 
 				StaticGameData.Stars.Add(Enums.StellarBodies.cygni, new Objects.Star(Enums.StellarBodies.cygni)
 				{
 					PlanetDistanceList = new List<int> { 37, 41, 53, 59, 67, 77, 84, 92, 114, 126, 128, 144, 146, 158, 179, 189 }
-				});
+                });
 
 				StaticGameData.Stars.Add(Enums.StellarBodies.procyon, new Objects.Star(Enums.StellarBodies.procyon)
 				{
 					PlanetDistanceList = new List<int> { 53, 59, 129, 143, 160, 173 }
-				});
+                });
 
 				StaticGameData.Stars.Add(Enums.StellarBodies.tau_ceti, new Objects.Star(Enums.StellarBodies.tau_ceti)
 				{
 					PlanetDistanceList = new List<int> { 53, 57, 68, 76, 85, 91, 113, 127, 146, 158 }
-				});
+                });
 
 				StaticGameData.Planets.Add(Enums.StellarBodies.mercury, new Objects.Planet(Enums.StellarBodies.mercury, 0)
 				{
@@ -4032,7 +4099,7 @@ namespace Deuteros.Code
 					}
 				}
 
-				StaticGameData.ResourceLevels_Survey_Multiplier[Enums.ItemTypes.iron] = 1;
+                StaticGameData.ResourceLevels_Survey_Multiplier[Enums.ItemTypes.iron] = 1;
 				StaticGameData.ResourceLevels_Survey_Multiplier[Enums.ItemTypes.titanium] = 1;
 				StaticGameData.ResourceLevels_Survey_Multiplier[Enums.ItemTypes.aluminium] = 1;
 				StaticGameData.ResourceLevels_Survey_Multiplier[Enums.ItemTypes.carbon] = 1;

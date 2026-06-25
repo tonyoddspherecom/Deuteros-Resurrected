@@ -11,6 +11,7 @@ namespace Deuteros.Code.Objects
         public PlanetResource PlanetResources { get; set; }
         public bool ActivePlayer { get; set; }
         public bool IsMoon { get; set; }
+        public int MethanoidAttackedCount { get; set; }
         public bool ActiveMethanoid { get; set; }
         public bool Segment { get; set; }
         public SpaceStation Station { get; set; }
@@ -79,11 +80,22 @@ namespace Deuteros.Code.Objects
                         int amountRemoved = (PlanetResources.Derricks * GameCore.SingletonInstance.GameData.ActiveSaveFile.BaseGameData.ResourceRate_Per_Derrick[material.MaterialType]) * daysDifference;
                         material.GroundAmount -= amountRemoved;
 
-                        if (PlanetResources.Stores[material.MaterialType] < 50000)
-                            PlanetResources.Stores[material.MaterialType] += amountRemoved;
+                        
+                        if (Station.MtxInstalled)
+                        {
+                            //mtx mines directly to the station
+                            if (Station.Resources.Stores[material.MaterialType] < 50000)
+                                Station.Resources.Stores[material.MaterialType] += amountRemoved;
+                        }
+                        else
+                        {
+                            if (PlanetResources.Stores[material.MaterialType] < 50000)
+                                PlanetResources.Stores[material.MaterialType] += amountRemoved;
+                        }
                     }
                 }
             }
+
 
         }
     }

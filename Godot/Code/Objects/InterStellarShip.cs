@@ -45,6 +45,8 @@ namespace Deuteros.Code.Objects
                 totalJourneyTime = Math.Abs(destinationPlanet.Order - startPlanet.Order) * 4;
             }
 
+            if (StartTravelDay == 0) return totalJourneyTime;
+
             return totalJourneyTime - (int)(GameCore.SingletonInstance.GameData.ActiveSaveFile.CurrentDay - StartTravelDay);
         }
     }

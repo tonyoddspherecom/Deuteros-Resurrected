@@ -32,8 +32,7 @@ public partial class Battle : BaseSubScene
 	StarsCanvas StarsCanvas { get; set; }
 
 	BattleLogic _battle;
-	InterStellarShip _player;
-
+	
 
 	// Called when the node enters the scene tree for the first time.
 	public override void _Ready()

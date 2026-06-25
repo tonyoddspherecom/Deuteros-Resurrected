@@ -248,10 +248,10 @@ namespace Deuteros.Code
 		public delegate void ShipCreatedDelegate(IShip ship);
 		public event ShipCreatedDelegate ShipCreated;
 
-        public delegate void AlientTechDiscoveryDelegate(ItemTypes techType);
-        public event AlientTechDiscoveryDelegate AlienTechDiscovery;
+		public delegate void AlientTechDiscoveryDelegate(ItemTypes techType);
+		public event AlientTechDiscoveryDelegate AlienTechDiscovery;
 
-        public delegate void UnlockAddedDelegate(Enums.Game_Unlocks addedUnlock);
+		public delegate void UnlockAddedDelegate(Enums.Game_Unlocks addedUnlock);
 		public event UnlockAddedDelegate UnlockAdded;
 
 		public GameCore()
@@ -333,12 +333,12 @@ namespace Deuteros.Code
 		{
 			UnlockAdded?.Invoke(addedUnlock);
 		}
-        public void TriggerAlienTechDiscovery(Enums.ItemTypes techType)
-        {
-            AlienTechDiscovery?.Invoke(techType);
-        }
+		public void TriggerAlienTechDiscovery(Enums.ItemTypes techType)
+		{
+			AlienTechDiscovery?.Invoke(techType);
+		}
 
-        public Deuteros.Code.Objects.Interfaces.IPlanet GetCurrentPlanet()
+		public Deuteros.Code.Objects.Interfaces.IPlanet GetCurrentPlanet()
 		{
 			return GameData.ActiveSaveFile.BaseGameData.Planets[GameData.ActiveSaveFile.CurrentPlanet];
 		}
@@ -401,14 +401,41 @@ namespace Deuteros.Code
 			GetNode<Node>("/root/Master/MainScene").AddChild(newScene);
 			_currentScreen = newScene;
 
-			if (_menuScreen != null && _currentScreen.SceneFilePath.Contains("Overview") && !sceneVariables.Contains(Enums.SceneVariables.Orbit))
+			UpdateMenuButtons(sceneVariables.Contains(Enums.SceneVariables.Ground), sceneVariables.Contains(Enums.SceneVariables.Orbit));
+
+			if (_currentScreen.GetType() == typeof(ShipInterior))
+			{
+				_menuScreen.Location.Text = ((ShipInterior)_currentScreen).Ship.Name;
+			}
+
+			if (_currentScreen.SceneFilePath.Contains("ResourceMap"))
+			{
+				_menuScreen.Location.Text = "Deposit Analysis";
+			}
+
+			if (_currentScreen.SceneFilePath.Contains("News.tscn"))
+			{
+				_menuScreen.Location.Text = "News Bulletins";
+			}
+
+			if (_currentScreen.SceneFilePath.Contains("SaveScreen.tscn"))
+			{
+				_menuScreen.Location.Text = "Disk Access";
+			}
+
+			ShipSelected = Guid.Empty;
+		}
+
+		public void UpdateMenuButtons(bool ground, bool orbit)
+		{
+			if (_menuScreen != null && _currentScreen.SceneFilePath.Contains("Overview") && !orbit)
 			{
 				_menuScreen.MenuButtons = OverviewMenuButtons;
 				_menuScreen.Location.Text = "MASTER CONTROL";
 				_menuScreen.Star.Text = GetCurrentPlanet().ParentStar.ToScreenString(" ");
 				_menuScreen.SetupMenus();
 			}
-			else if (_menuScreen != null && GetCurrentPlanet().PlanetId == Enums.StellarBodies.earth && sceneVariables.Contains(Enums.SceneVariables.Ground))
+			else if (_menuScreen != null && GetCurrentPlanet().PlanetId == Enums.StellarBodies.earth && ground)
 			{
 				_menuScreen.MenuButtons = EarthMenuButtons;
 				_menuScreen.Location.Text = "Earth City";
@@ -416,7 +443,7 @@ namespace Deuteros.Code
 				_menuScreen.SetupMenus();
 				Earth.GroundSelected = true;
 			}
-			else if (_menuScreen != null && GetCurrentPlanet().PlanetId == Enums.StellarBodies.earth && sceneVariables.Contains(Enums.SceneVariables.Orbit))
+			else if (_menuScreen != null && GetCurrentPlanet().PlanetId == Enums.StellarBodies.earth && orbit)
 			{
 				_menuScreen.MenuButtons = EarthStationMenuButtons;
 				_menuScreen.Location.Text = "Earth Orbital";
@@ -450,7 +477,7 @@ namespace Deuteros.Code
 					}
 				}
 
-				if ((_currentScreen.GetType() == typeof(ShipBay) || _currentScreen.GetType() == typeof(GroundMaterials) || _currentScreen.GetType() == typeof(Deuteros.Code.Platform.Screens.Store)) && !sceneVariables.Contains(Enums.SceneVariables.Orbit))
+				if ((_currentScreen.GetType() == typeof(ShipBay) || _currentScreen.GetType() == typeof(GroundMaterials) || _currentScreen.GetType() == typeof(Deuteros.Code.Platform.Screens.Store)) && !orbit)
 				{
 					_menuScreen.Location.Text = GetCurrentPlanet().PlanetId.ToScreenString(" ") + " colony";
 				}
@@ -463,29 +490,7 @@ namespace Deuteros.Code
 				_menuScreen.SetupMenus();
 			}
 
-			if (_currentScreen.GetType() == typeof(ShipInterior))
-			{
-				_menuScreen.Location.Text = ((ShipInterior)_currentScreen).Ship.Name;
-			}
-
-			if (_currentScreen.SceneFilePath.Contains("ResourceMap"))
-			{
-				_menuScreen.Location.Text = "Deposit Analysis";
-			}
-
-			if (_currentScreen.SceneFilePath.Contains("News.tscn"))
-			{
-				_menuScreen.Location.Text = "News Bulletins";
-			}
-
-			if (_currentScreen.SceneFilePath.Contains("SaveScreen.tscn"))
-			{
-				_menuScreen.Location.Text = "Disk Access";
-			}
-
-			ShipSelected = Guid.Empty;
 		}
-
 		public static void LockScreen(string lockMessage = "")
 		{
 			lock (SingletonInstance._screenLocker)
