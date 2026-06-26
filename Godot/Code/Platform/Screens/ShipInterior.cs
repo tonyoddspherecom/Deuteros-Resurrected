@@ -249,7 +249,8 @@ namespace Deuteros.Code.Platform.Screens
 						else if (!((EnemyFleet)enemyShip).Attacking)
                         {
 							//enemy fleet has fled
-							((EnemyFleet)enemyShip).CancelAttack();
+
+							((EnemyFleet)enemyShip).CancelAttack(Ship.PlanetLocation);
                         }
 
                         if (((InterStellarShip)Ship).DroneCount == 0)

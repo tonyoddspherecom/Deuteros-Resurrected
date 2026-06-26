@@ -108,7 +108,7 @@ namespace Deuteros.Code.Objects
             AttackCount = 0;
         }
 
-        public void CancelAttack()
+        public void CancelAttack(Enums.StellarBodies attackLocation)
         {
             AttackDay = 0;
             Attacking = false;
@@ -116,7 +116,7 @@ namespace Deuteros.Code.Objects
             if (AttackTrigger > 200) AttackTrigger = 200;
 
             //all ships at this location are no longer under attack
-            foreach (Ship ship in GameCore.SingletonInstance.GameData.ActiveSaveFile.Ships.Where(s => s.PlanetLocation == Ship.PlanetLocation && s.ShipType != Ship_Types.Shuttle))
+            foreach (Ship ship in GameCore.SingletonInstance.GameData.ActiveSaveFile.Ships.Where(s => s.PlanetLocation == attackLocation && s.ShipType != Ship_Types.Shuttle))
             {
                 ((InterStellarShip)ship).AttackedCount = 0;
             }
