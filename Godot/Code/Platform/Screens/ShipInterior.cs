@@ -225,55 +225,40 @@ namespace Deuteros.Code.Platform.Screens
 							GameCore.SingletonInstance.GameData.PlanetUnderAttack(Ship.PlanetLocation)))
 					{
 
-						InterStellarShip enemyShip;
+						EnemyFleet enemyShip;
 						if (GameCore.SingletonInstance.GameData.ActiveSaveFile.BaseGameData.Planets[Ship.PlanetLocation].ActiveMethanoid)
 						{
-							enemyShip = new IOS();
+							enemyShip = new EnemyFleet();
+
 							//pull upto 200 drones from the planet store
 							enemyShip.DroneCount = Math.Min(200, GameCore.SingletonInstance.GameData.ActiveSaveFile.BaseGameData.Planets[Ship.PlanetLocation].Station.Resources.Stores[ItemTypes.ios_drone]);
 							GameCore.SingletonInstance.GameData.ActiveSaveFile.BaseGameData.Planets[Ship.PlanetLocation].Station.Resources.Stores[ItemTypes.ios_drone] -= enemyShip.DroneCount;
 						}
 						else
 						{
-							enemyShip = (InterStellarShip)GameCore.SingletonInstance.GameData.ActiveSaveFile.Ships.FirstOrDefault(s => s.PlanetLocation == Ship.PlanetLocation && s.ShipType != Ship_Types.Shuttle && ((InterStellarShip)s).MethanoidOwned);
+							enemyShip = (EnemyFleet)GameCore.SingletonInstance.GameData.ActiveSaveFile.Ships.FirstOrDefault(s => s.PlanetLocation == Ship.PlanetLocation && s.ShipType != Ship_Types.Shuttle && ((InterStellarShip)s).MethanoidOwned);
 						}
 
 						await ShowBattleFrame((InterStellarShip)Ship, enemyShip);
 
 						if (GameCore.SingletonInstance.GameData.ActiveSaveFile.BaseGameData.Planets[Ship.PlanetLocation].ActiveMethanoid)
-						{
-							//move remaining drones back to store
-							GameCore.SingletonInstance.GameData.ActiveSaveFile.BaseGameData.Planets[Ship.PlanetLocation].Station.Resources.Stores[ItemTypes.ios_drone] += enemyShip.DroneCount;
-						}
-						else
-						{
-							if (enemyShip.DroneCount == 0)
-							{
-								//enemy Ship destroyed
-								GameCore.SingletonInstance.GameData.ActiveSaveFile.Ships.Remove(enemyShip);
-							}
-							else if (enemyShip.GetType()==typeof(EnemyFleet))
-							{
-								((EnemyFleet)enemyShip).CancelAttack();
-                            }
+                        {
+                            //move remaining drones back to store
+                            GameCore.SingletonInstance.GameData.ActiveSaveFile.BaseGameData.Planets[Ship.PlanetLocation].Station.Resources.Stores[ItemTypes.ios_drone] += enemyShip.DroneCount;
+                        }
+						else if (!((EnemyFleet)enemyShip).Attacking)
+                        {
+							//enemy fleet has fled
+							((EnemyFleet)enemyShip).CancelAttack();
                         }
 
-						if (((InterStellarShip)Ship).DroneCount == 0)
+                        if (((InterStellarShip)Ship).DroneCount == 0)
 						{
 							//player Ship destroyed
 							GameCore.SingletonInstance.GameData.ActiveSaveFile.Ships.Remove(Ship);
 
 							//todo show ship destroyed page
 						}
-						else
-						{
-							//all ships at this location are no longer under attack
-							foreach (Ship ship in GameCore.SingletonInstance.GameData.ActiveSaveFile.Ships.Where(s => s.PlanetLocation == Ship.PlanetLocation && s.ShipType!=Ship_Types.Shuttle))
-							{
-								((InterStellarShip)ship).AttackedCount = 0;
-							}
-						}
-							
 
 						UpdateState();
 					}
@@ -310,7 +295,7 @@ namespace Deuteros.Code.Platform.Screens
 
 						//6 stations completed means war
 						if (!GameCore.SingletonInstance.GameData.ActiveSaveFile.AtWar &&
-							GameCore.SingletonInstance.GameData.ActiveSaveFile.BaseGameData.Planets.Values.Count(p => p.Station.Built && !p.ActiveMethanoid) == 6)
+							GameCore.SingletonInstance.GameData.ActiveSaveFile.BaseGameData.Planets.Values.Count(p => p.Station.Built && !p.ActiveMethanoid) == 2)
 						{
 							await ShowMethanoidTextFrame(GameCore.SingletonInstance.GameData.ActiveSaveFile.BaseGameData.ModuleFrameTexts[Enums.ModuleFrameText.Methanoid_DeclareWar], new List<string>());
 
@@ -346,7 +331,7 @@ namespace Deuteros.Code.Platform.Screens
 			}
 		}
 
-		private async Task ShowBattleFrame(InterStellarShip player, InterStellarShip enemy)
+		private async Task ShowBattleFrame(InterStellarShip player, EnemyFleet enemy)
 		{
 			BattleScreen = GD.Load<PackedScene>("res://PreFabs/ShipModuleWindows/Battle.tscn").Instantiate<Battle>();
 

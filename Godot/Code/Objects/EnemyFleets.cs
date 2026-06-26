@@ -64,10 +64,63 @@ namespace Deuteros.Code.Objects
 
         }
    
+        public void CapturePlanet()
+        {
+            Attacking = false;
+            var attackedPlanet = GameCore.SingletonInstance.GameData.ActiveSaveFile.BaseGameData.Planets[DestinationPlanetLocation];
+            attackedPlanet.Station.MtxInstalled = true;
+            attackedPlanet.Station.SdmInstalled = true;
+            attackedPlanet.MethanoidAttackedCount = 0;
+            attackedPlanet.ActiveMethanoid = true;
+
+            //todo remove planetary stocks
+            attackedPlanet.Station.Resources.Stores.Items.Clear();
+            attackedPlanet.PlanetResources.Stores.Items.Clear();
+
+            attackedPlanet.Station.Resources.Stores.Items[ItemTypes.ios_drone] = 50;
+
+            //remove all ships at this location except methanoid fleets
+            IShip ship = GameCore.SingletonInstance.GameData.ActiveSaveFile.Ships.FirstOrDefault(s => s.PlanetLocation == attackedPlanet.PlanetId && s.GetType()!=typeof(EnemyFleet));
+            while (ship != null)
+            {
+                GameCore.SingletonInstance.GameData.ActiveSaveFile.Ships.Remove(ship);
+                ship = GameCore.SingletonInstance.GameData.ActiveSaveFile.Ships.FirstOrDefault(s => s.PlanetLocation == attackedPlanet.PlanetId && s.GetType() != typeof(EnemyFleet));
+            }
+
+            //remove all stack from planet and station
+            attackedPlanet.Station.Resources.RemoveAllStaff();
+            attackedPlanet.PlanetResources.RemoveAllStaff();
+
+            attackedPlanet.PlanetResources.Derricks = Random.Shared.Next(8);
+
+            //ensure base is built and undamaged
+            attackedPlanet.BaseBuildParts = 2;
+            attackedPlanet.BaseDamaged = false;
+
+            //install AOC
+            attackedPlanet.Station.Factory.AOC = true;
+
+            //random amounts of materials in orbit
+            foreach (var material in attackedPlanet.PlanetResources.Materials)
+            {
+                attackedPlanet.Station.Resources.Stores.Items[material.MaterialType] = Random.Shared.Next(1024) + 100;
+            }
+            AttackCount = 0;
+        }
+
         public void CancelAttack()
         {
             AttackDay = 0;
             Attacking = false;
+            AttackTrigger = AttackTrigger * 2;
+            if (AttackTrigger > 200) AttackTrigger = 200;
+
+            //all ships at this location are no longer under attack
+            foreach (Ship ship in GameCore.SingletonInstance.GameData.ActiveSaveFile.Ships.Where(s => s.PlanetLocation == Ship.PlanetLocation && s.ShipType != Ship_Types.Shuttle))
+            {
+                ((InterStellarShip)ship).AttackedCount = 0;
+            }
+
         }
         public void ProcessFleet()
         {
@@ -80,56 +133,12 @@ namespace Deuteros.Code.Objects
                     PlanetLocation = DestinationPlanetLocation;
                     var attackedPlanet = GameCore.SingletonInstance.GameData.ActiveSaveFile.BaseGameData.Planets[DestinationPlanetLocation];
                     attackedPlanet.MethanoidAttackedCount++;
-                    AttackTrigger = AttackTrigger * 2;
-                    if (AttackTrigger > 200) AttackTrigger = 200;
                     Attacking = true;
                     AttackDay = 5;
                 }
                 else if (Attacking && AttackDay == 0)
                 {
-                    //capture planet
-                    Attacking = false;
-                    var attackedPlanet = GameCore.SingletonInstance.GameData.ActiveSaveFile.BaseGameData.Planets[DestinationPlanetLocation];
-                    attackedPlanet.Station.MtxInstalled = true;
-                    attackedPlanet.Station.SdmInstalled = true;
-                    attackedPlanet.MethanoidAttackedCount = 0;
-                    attackedPlanet.ActiveMethanoid = true;
-
-                    //todo remove planetary stocks
-                    attackedPlanet.Station.Resources.Stores.Items.Clear();
-                    attackedPlanet.PlanetResources.Stores.Items.Clear();
-
-                    attackedPlanet.Station.Resources.Stores.Items[ItemTypes.ios_drone] = 50;
-
-                    //remove all ships at this location
-                    IShip ship = GameCore.SingletonInstance.GameData.ActiveSaveFile.Ships.FirstOrDefault(s => s.PlanetLocation == attackedPlanet.PlanetId);
-                    while (ship!= null)
-                    {
-                        GameCore.SingletonInstance.GameData.ActiveSaveFile.Ships.Remove(ship);
-                        ship = GameCore.SingletonInstance.GameData.ActiveSaveFile.Ships.FirstOrDefault(s => s.PlanetLocation == attackedPlanet.PlanetId);
-                    }
-
-                    //remove all stack from planet and station
-                    attackedPlanet.Station.Resources.RemoveAllStaff();
-                    attackedPlanet.PlanetResources.RemoveAllStaff();
-
-                    attackedPlanet.PlanetResources.Derricks = Random.Shared.Next(8);
-
-                    //ensure base is built and undamaged
-                    attackedPlanet.BaseBuildParts = 2;
-                    attackedPlanet.BaseDamaged = false;
-
-                    //install AOC
-                    attackedPlanet.Station.Factory.AOC = true;
-
-                    //random amounts of materials in orbit
-                    foreach (var material in attackedPlanet.PlanetResources.Materials)
-                    {
-                        attackedPlanet.Station.Resources.Stores.Items[material.MaterialType] = Random.Shared.Next(1024)+100;
-                    }
-
-                    AttackCount = 0;
-
+                    CapturePlanet();
                 }
             }
         }

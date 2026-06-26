@@ -93,8 +93,8 @@ public partial class Settings : Node2D
 			gameData.GetItem(Enums.ItemTypes.r_frame).Research.Researched = true;
 			gameData.GetItem(Enums.ItemTypes.r_frame).Research.ResearchOrder = GameCore.SingletonInstance.GameData.ActiveSaveFile.BaseGameData.ItemList.Where(T => T.Research != null && T.Research.Researched).Count();
 			gameData.GetItem(Enums.ItemTypes.r_frame).Locked = false;
-		}
-	}
+        }
+    }
 
 	private void ProdInEarthOrbit_Pressed()
 	{

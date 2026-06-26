@@ -102,7 +102,7 @@ public partial class Battle : BaseSubScene
 		);
 	}
 
-	public async Task DoBattle(InterStellarShip player, InterStellarShip enemy)
+	public async Task DoBattle(InterStellarShip player, EnemyFleet enemy)
 	{
 		if (player == null)
 		{
@@ -115,7 +115,7 @@ public partial class Battle : BaseSubScene
 
 		if (enemy == null)
 		{
-			enemy = new IOS();
+			enemy = new EnemyFleet();
 			enemy.DroneCount = 42;
 		}
 
@@ -153,6 +153,12 @@ public partial class Battle : BaseSubScene
 			await WaitMs(100);
 		}
 		BattleTimer.Stop();
+
+		player.DroneCount = _battle.Player1Ships;
+		enemy.DroneCount = _battle.Player2Ships;
+
+		if (_battle.EnemyFled)
+			enemy.Attacking = false;
 
 		await WaitMs(1000);
 	}

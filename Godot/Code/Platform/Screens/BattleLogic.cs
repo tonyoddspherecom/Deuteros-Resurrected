@@ -17,6 +17,7 @@ namespace Deuteros.Code.Objects.Battle
         public int Player2Ships { get; set; }
         public int Player2Power { get; set; }
 
+        public bool EnemyFled { get { return P2fleeing; } }
         public bool PTLFired { get { return PTLstate != 0; } }
 
         private bool canFirePtl;
