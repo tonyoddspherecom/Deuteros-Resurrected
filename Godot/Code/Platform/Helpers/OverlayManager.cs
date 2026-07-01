@@ -20,10 +20,10 @@ namespace Deuteros.Code.Platform.Helpers
             ProcessMode = Node.ProcessModeEnum.WhenPaused;
         }
 
-        public void ShowOverlay(PackedScene packed)
+        public Node ShowOverlay(PackedScene packed, bool dodim = true)
         {
             if (_overlayRoot != null)
-                return; // Already showing something
+                return null; // Already showing something
 
             Input.MouseMode = Input.MouseModeEnum.Visible;
 
@@ -37,13 +37,16 @@ namespace Deuteros.Code.Platform.Helpers
             _overlayRoot.SetAnchorsPreset(Control.LayoutPreset.FullRect);
             AddChild(_overlayRoot);
 
-            var dim = new ColorRect
+            if (dodim)
             {
-                Color = new Color(0, 0, 0, 0.5f),
-                MouseFilter = Control.MouseFilterEnum.Stop
-            };
-            dim.SetAnchorsPreset(Control.LayoutPreset.FullRect);
-            _overlayRoot.AddChild(dim);
+                var dim = new ColorRect
+                {
+                    Color = new Color(0, 0, 0, 0.5f),
+                    MouseFilter = Control.MouseFilterEnum.Stop
+                };
+                dim.SetAnchorsPreset(Control.LayoutPreset.FullRect);
+                _overlayRoot.AddChild(dim);
+            }
 
             var center = new CenterContainer
             {
@@ -64,6 +67,8 @@ namespace Deuteros.Code.Platform.Helpers
 
             _wasPaused = GetTree().Paused;
             GetTree().Paused = true;
+
+            return _contentInstance;
         }
 
         /// Handle Escape / Cancel while overlay is up.

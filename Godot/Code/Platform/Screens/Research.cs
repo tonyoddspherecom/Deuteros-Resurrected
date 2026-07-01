@@ -160,9 +160,6 @@ namespace Deuteros.Code.Platform.Screens
 				TechLevelLabel.Text = "Tech Level";
 				TechLevelDataLabel.Text = researchItem.Research.TechLevel.ToString();
 
-				var level = GameCore.Earth.ResearchStaff.GetLevel();
-
-
 				if (researchItem.Research.Researched)
 				{
 					ResearchedNode.Visible = true;
@@ -178,7 +175,7 @@ namespace Deuteros.Code.Platform.Screens
 					ItemNotesDataLabel.Text = researchItem.OrbitOnly ? "In Orbit Only" : "by any factory";
 				}
 				
-				else if (GameCore.Earth.ResearchStaff != null && GameCore.Earth.ResearchStaff.GetLevel()<researchItem.Research.TechLevel)
+				else if (GameCore.Earth.ResearchStaff == null || GameCore.Earth.ResearchStaff.GetLevel()<researchItem.Research.TechLevel)
 				{
 					InProgressNode.Visible = true;
 

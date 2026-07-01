@@ -272,7 +272,7 @@ namespace Deuteros.Code.Platform.Screens
 				else if (Ship.Modules[modulePressed].ModuleType == Module_Types.Tool)
 				{
 
-					if ((Ship.ShipType != Ship_Types.Shuttle || (Ship.ShipType == Ship_Types.Shuttle && !((Shuttle)Ship).OnGround)) && Ship.ShipState == Ship_States.UnDocked  && Ship.Modules[modulePressed].ItemStored == ItemTypes.of_frame && CurrentPlanet.Station.Built == false && Ship.Pilot != null)
+					if ((Ship.ShipType != Ship_Types.Shuttle || (Ship.ShipType == Ship_Types.Shuttle && !((Shuttle)Ship).OnGround)) && Ship.ShipState == Ship_States.UnDocked  && Ship.Modules[modulePressed].ItemStored == ItemTypes.of_frame && CurrentPlanet.Station.Built == false && Ship.Pilot != null && Ship.PlanetLocation!=StellarBodies.asteroids)
 					{
 						if (Ship.Pilot != null) Ship.Pilot.ActionsTaken++;
 
@@ -296,7 +296,7 @@ namespace Deuteros.Code.Platform.Screens
 
 						//6 stations completed means war
 						if (!GameCore.SingletonInstance.GameData.ActiveSaveFile.AtWar &&
-							GameCore.SingletonInstance.GameData.ActiveSaveFile.BaseGameData.Planets.Values.Count(p => p.Station.Built && !p.ActiveMethanoid) == 2)
+							GameCore.SingletonInstance.GameData.ActiveSaveFile.BaseGameData.Planets.Values.Count(p => p.Station.Built && !p.ActiveMethanoid) == 6)
 						{
 							await ShowMethanoidTextFrame(GameCore.SingletonInstance.GameData.ActiveSaveFile.BaseGameData.ModuleFrameTexts[Enums.ModuleFrameText.Methanoid_DeclareWar], new List<string>());
 
@@ -401,6 +401,8 @@ namespace Deuteros.Code.Platform.Screens
 
 		private void Dock_Pressed()
 		{
+			if (Ship.PlanetLocation == StellarBodies.asteroids)
+				return;
 			if (Ship.ShipType == Ship_Types.Shuttle || ((InterStellarShip)Ship).AttackedCount == 0)
 			{
 				if (Ship.ShipType != Ship_Types.Shuttle &&
@@ -607,7 +609,7 @@ namespace Deuteros.Code.Platform.Screens
 					CargoValues[i].AddThemeColorOverride("font_color", GameCore.SingletonInstance.GameData.ActiveSaveFile.BaseGameData.Yellow);
 
 					if (Ship.Modules[i].StaffStored != null)
-						CargoValues[i].Text = Ship.Modules[i].StaffStored.Type.ToScreenString();
+						CargoValues[i].Text = Ship.Modules[i].StaffStored.GetTypeText2();
 					else
 						CargoValues[i].Text = "Empty";
 

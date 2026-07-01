@@ -106,7 +106,7 @@ namespace Deuteros.Code.Platform.Screens.ShipBayScenes
 
 				if (Module.StaffStored != null)
 				{
-					Contents.Text = Module.StaffStored.Leader + "\n" + Module.StaffStored.Count;
+                    Contents.Text = Module.StaffStored.GetTypeText2() + "\n" + Module.StaffStored.Count;
 
 					if (Module.StaffStored.Type == StaffType.Production)
 						Contents.AddThemeColorOverride("font_color", GameCore.SingletonInstance.GameData.ActiveSaveFile.BaseGameData.Blue);

@@ -50,7 +50,7 @@ namespace Deuteros.Code.Objects
             return 0;
         }
 
-        public string GetLevelString()
+        public string GetLevelString(bool artisan=false)
         {
             if (Type == Enums.StaffType.Research)
             {
@@ -63,6 +63,8 @@ namespace Deuteros.Code.Objects
             }
             else if (Type == Enums.StaffType.Production)
             {
+                if (artisan) return "Artisan";
+
                 if (ActionsTaken >= 6 && ActionsTaken < 12)
                     return Enums.StaffLevel_Production.Engineer.ToScreenString();
                 else if (ActionsTaken >= 12)
@@ -80,6 +82,18 @@ namespace Deuteros.Code.Objects
                     return Enums.StaffLevel_Marines.Pilot.ToScreenString();
             }
 
+            return "";
+        }
+
+        public string GetTypeText2()
+        {
+            switch(Type)
+            {
+                case Enums.StaffType.Production:
+                    return "Artisans";
+                case Enums.StaffType.Marines:
+                    return "Mariners";
+            }
             return "";
         }
     }

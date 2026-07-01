@@ -352,6 +352,15 @@ namespace Deuteros.Code
 				_menuScreen.HoverInfo.Text = HoverText;
 		}
 
+		public static void ShowError(BaseSubScene scene, string ErrorText)
+		{
+			var ErrorScreen = GD.Load<PackedScene>("res://Screens/Base/Error.tscn");
+			var overlay = OverlayManager.Instance.ShowOverlay(ErrorScreen, false);
+			var errorLabel = overlay.GetNode<Label>("ErrorButton/OuterColorRect/InnerColorRect/ErrorLabel"); ;
+
+			errorLabel.Text = ErrorText;
+		}
+
 		private void UpdateTime()
 		{
 			if (GameData.ActiveSaveFile.TimeSkip || GameData.ActiveSaveFile.TimeSkipDay)
@@ -371,24 +380,24 @@ namespace Deuteros.Code
 
 		private void UpdateLocationText(bool orbit)
 		{
-            if (_currentScreen.GetType() == typeof(ShipInterior))
-            {
-                _menuScreen.Location.Text = ((ShipInterior)_currentScreen).Ship.Name;
-            }
-            //else if ((_currentScreen.GetType() == typeof(ShipBay) || _currentScreen.GetType() == typeof(GroundMaterials) || _currentScreen.GetType() == typeof(Deuteros.Code.Platform.Screens.Store)) && !orbit)
+			if (_currentScreen.GetType() == typeof(ShipInterior))
+			{
+				_menuScreen.Location.Text = ((ShipInterior)_currentScreen).Ship.Name;
+			}
+			//else if ((_currentScreen.GetType() == typeof(ShipBay) || _currentScreen.GetType() == typeof(GroundMaterials) || _currentScreen.GetType() == typeof(Deuteros.Code.Platform.Screens.Store)) && !orbit)
 			else if (!orbit)
-            {
+			{
 				if (GetCurrentPlanet().PlanetId==StellarBodies.earth)
-                    _menuScreen.Location.Text = GetCurrentPlanet().PlanetId.ToScreenString(" ") + " City";
-                else
-                    _menuScreen.Location.Text = GetCurrentPlanet().PlanetId.ToScreenString(" ") + " Colony";
-            }
-            else
-            {
-                _menuScreen.Location.Text = GetCurrentPlanet().PlanetId.ToScreenString(" ") + " Orbital";
-            }
-        }
-        public void ShowBulletin(BulletinTypes bulletin)
+					_menuScreen.Location.Text = GetCurrentPlanet().PlanetId.ToScreenString(" ") + " City";
+				else
+					_menuScreen.Location.Text = GetCurrentPlanet().PlanetId.ToScreenString(" ") + " Colony";
+			}
+			else
+			{
+				_menuScreen.Location.Text = GetCurrentPlanet().PlanetId.ToScreenString(" ") + " Orbital";
+			}
+		}
+		public void ShowBulletin(BulletinTypes bulletin)
 		{
 			GameCore.SingletonInstance.ChangeScene(Enums.Scenes.Bulletins, new List<SceneVariables>());
 			_menuScreen.Location.Text = "News Bulletins";
@@ -458,8 +467,8 @@ namespace Deuteros.Code
 			{
 				_menuScreen.MenuButtons = EarthMenuButtons;
 				_menuScreen.Star.Text = "The Sun";
-                UpdateLocationText(false);
-                _menuScreen.SetupMenus();
+				UpdateLocationText(false);
+				_menuScreen.SetupMenus();
 				Earth.GroundSelected = true;
 			}
 			else if (_menuScreen != null && GetCurrentPlanet().PlanetId == Enums.StellarBodies.earth && orbit)
@@ -467,10 +476,10 @@ namespace Deuteros.Code
 				_menuScreen.MenuButtons = EarthStationMenuButtons;
 				_menuScreen.Star.Text = "The Sun";
 
-                UpdateLocationText(true);
+				UpdateLocationText(true);
 
-                //disable menus or ship interior while in transit
-                if (_currentScreen.GetType() == typeof(ShipInterior) && ((ShipInterior)_currentScreen).Ship.ShipType != Ship_Types.Shuttle)
+				//disable menus or ship interior while in transit
+				if (_currentScreen.GetType() == typeof(ShipInterior) && ((ShipInterior)_currentScreen).Ship.ShipType != Ship_Types.Shuttle)
 				{
 					if (((ShipInterior)_currentScreen).Ship.ShipState == Ship_States.InTransit)
 					{

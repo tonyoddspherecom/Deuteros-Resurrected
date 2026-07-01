@@ -182,8 +182,9 @@ namespace Deuteros.Code.Platform.Screens
 			EquipmentStock.Visible = false;
 			StaffList.Visible = false;
 			GrappleWindowControl.Visible = false;
+			Nav_Create_SCG.Visible = GameCore.SingletonInstance.GameData.GetItem(Enums.ItemTypes.star_drive).Research.Locked = false;
 
-			ScreenState = GetScreenState();
+            ScreenState = GetScreenState();
 
 			ScrollToScreen();
 
@@ -276,6 +277,13 @@ namespace Deuteros.Code.Platform.Screens
 		{
 			if ((Ground && CurrentPlanet.PlanetResources.Stores[Enums.ItemTypes.s_chassis] > 0) || (!Ground && CurrentPlanet.Station.Resources.Stores[Enums.ItemTypes.s_chassis] > 0))
 			{
+				if (GameCore.SingletonInstance.GameData.ActiveSaveFile.Ships.Any(s => s.ShipType == Ship_Types.Shuttle && s.PlanetLocation == CurrentPlanet.PlanetId))
+				{
+					GameCore.ShowError(this, "\nShuttle Is\nAlready Active\nHere !");
+					return;
+				}
+
+
 				var newShuttle = new Shuttle();
 				newShuttle.StartTravelDay = 0;
 				newShuttle.StarLocation = CurrentPlanet.ParentStar;

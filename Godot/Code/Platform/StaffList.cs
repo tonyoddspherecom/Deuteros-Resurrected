@@ -105,7 +105,7 @@ namespace Deuteros.Code.Platform
 				if (CurrentStaff[i] != null)    
 				{
 					staffBackground.Visible = true;
-					staffName.Text = CurrentStaff[i].GetLevelString()+"\n"+CurrentStaff[i].Leader;
+					staffName.Text = CurrentStaff[i].GetLevelString(true)+"\n"+CurrentStaff[i].Leader;
 					staffCount.Text = CurrentStaff[i].Count.ToString();
 					if (CurrentStaff[i].Type == StaffType.Marines)
 						staffBackground.Color = GameCore.SingletonInstance.GameData.ActiveSaveFile.BaseGameData.Red;

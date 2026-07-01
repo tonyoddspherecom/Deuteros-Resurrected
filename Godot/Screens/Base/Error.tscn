@@ -1,0 +1,37 @@
+[gd_scene load_steps=2 format=3 uid="uid://cc8ia5etw8m3c"]
+
+[ext_resource type="Script" path="res://Screens/Base/Error.cs" id="1_awx7g"]
+
+[node name="Node2D" type="Node2D"]
+script = ExtResource("1_awx7g")
+
+[node name="ErrorButton" type="Button" parent="."]
+offset_right = 325.0
+offset_bottom = 200.0
+
+[node name="OuterColorRect" type="ColorRect" parent="ErrorButton"]
+offset_left = 110.0
+offset_top = 74.0
+offset_right = 238.0
+offset_bottom = 131.0
+mouse_filter = 1
+color = Color(1, 0, 0, 1)
+
+[node name="InnerColorRect" type="ColorRect" parent="ErrorButton/OuterColorRect"]
+layout_mode = 0
+offset_left = 2.0
+offset_top = 2.0
+offset_right = 126.0
+offset_bottom = 55.0
+mouse_filter = 1
+color = Color(0.466667, 0.533333, 0.333333, 1)
+
+[node name="ErrorLabel" type="Label" parent="ErrorButton/OuterColorRect/InnerColorRect"]
+layout_mode = 0
+offset_left = 7.0
+offset_top = 3.0
+offset_right = 113.0
+offset_bottom = 40.0
+mouse_filter = 1
+text = "error
+"

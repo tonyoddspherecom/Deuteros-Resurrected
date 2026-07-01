@@ -10,6 +10,7 @@ using Deuteros.Code.Objects.Interfaces;
 using static System.Collections.Specialized.BitVector32;
 using System.ComponentModel.Design;
 using Deuteros.Code.Utility;
+using Godot.NativeInterop;
 
 namespace Deuteros.Code.Platform.Screens
 {
@@ -110,6 +111,31 @@ namespace Deuteros.Code.Platform.Screens
 					if (SelectedButton != null)
 					{
 						var addedItem = (Item)SelectedButton.ObjectData;
+
+						
+						if (addedItem.OrbitOnly && CurrentFactory.Ground)
+						{
+							GameCore.ShowError(this, "This Item Can\nOnly BE Made\nIn Orbit.");
+							return;
+						}
+
+						if (addedItem.Research.TechLevel>CurrentFactory.Builder.GetLevel())
+						{
+							string level="";
+							switch (addedItem.Research.TechLevel)
+							{
+								case 2:
+									level = "Engineer   ";
+									break;
+								case 3:
+									level = "Expert     ";
+									break;
+							}
+
+							GameCore.ShowError(this, "Team Leader\nMust Be Rated\n" + level + "To\nProduce This\nItem"); ;
+							return;
+
+						}
 
 						if (CurrentFactory.CurrentProductionItem() == null || CurrentFactory.CurrentProductionItem().Product.ItemType != addedItem.ItemType)
 						{
@@ -262,9 +288,9 @@ namespace Deuteros.Code.Platform.Screens
 			{
 				foreach(ProductionButton b in Buttons)
 				{
-                    b.Redraw(false);
-                }
-            }
+					b.Redraw(false);
+				}
+			}
 
 		}
 
@@ -357,7 +383,7 @@ namespace Deuteros.Code.Platform.Screens
 								{
 									currentFactory.ProductionQueue.Remove(currentFactory.CurrentProductionItem());
 								}
-                            }
+							}
 						}
 
 						foreach (var autoProduced in GameCore.SingletonInstance.GameData.GetAllActiveItems().Where(T => T.AutoProduce))

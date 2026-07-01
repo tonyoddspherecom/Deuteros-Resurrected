@@ -160,6 +160,9 @@ public partial class Battle : BaseSubScene
 		if (_battle.EnemyFled)
 			enemy.Attacking = false;
 
-		await WaitMs(1000);
+        if (_battle.PlayerFled)
+            player.EngageEngine();
+
+        await WaitMs(1000);
 	}
 }

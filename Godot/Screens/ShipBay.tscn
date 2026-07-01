@@ -742,79 +742,79 @@ offset_bottom = 108.0
 
 [node name="00" type="Button" parent="EquipmentStock/Buttons"]
 layout_mode = 0
-offset_top = -92.0
+offset_top = -93.0
 offset_right = 122.0
-offset_bottom = -84.0
+offset_bottom = -85.0
 flat = true
 
 [node name="01" type="Button" parent="EquipmentStock/Buttons"]
 layout_mode = 0
-offset_top = -84.0
+offset_top = -86.0
 offset_right = 122.0
-offset_bottom = -76.0
+offset_bottom = -78.0
 flat = true
 
 [node name="02" type="Button" parent="EquipmentStock/Buttons"]
 layout_mode = 0
-offset_top = -76.0
+offset_top = -79.0
 offset_right = 122.0
-offset_bottom = -68.0
+offset_bottom = -71.0
 flat = true
 
 [node name="03" type="Button" parent="EquipmentStock/Buttons"]
 layout_mode = 0
-offset_top = -68.0
+offset_top = -72.0
 offset_right = 122.0
-offset_bottom = -60.0
+offset_bottom = -64.0
 flat = true
 
 [node name="04" type="Button" parent="EquipmentStock/Buttons"]
 layout_mode = 0
-offset_top = -60.0
+offset_top = -65.0
 offset_right = 122.0
-offset_bottom = -52.0
+offset_bottom = -57.0
 flat = true
 
 [node name="05" type="Button" parent="EquipmentStock/Buttons"]
 layout_mode = 0
-offset_top = -52.0
+offset_top = -58.0
 offset_right = 122.0
-offset_bottom = -44.0
+offset_bottom = -50.0
 flat = true
 
 [node name="06" type="Button" parent="EquipmentStock/Buttons"]
+layout_mode = 0
+offset_top = -51.0
+offset_right = 122.0
+offset_bottom = -43.0
+flat = true
+
+[node name="07" type="Button" parent="EquipmentStock/Buttons"]
 layout_mode = 0
 offset_top = -44.0
 offset_right = 122.0
 offset_bottom = -36.0
 flat = true
 
-[node name="07" type="Button" parent="EquipmentStock/Buttons"]
-layout_mode = 0
-offset_top = -36.0
-offset_right = 122.0
-offset_bottom = -28.0
-flat = true
-
 [node name="08" type="Button" parent="EquipmentStock/Buttons"]
 layout_mode = 0
-offset_top = -28.0
+offset_top = -37.0
 offset_right = 122.0
-offset_bottom = -20.0
+offset_bottom = -29.0
 flat = true
 
 [node name="09" type="Button" parent="EquipmentStock/Buttons"]
 layout_mode = 0
-offset_top = -20.0
+offset_top = -30.0
 offset_right = 122.0
-offset_bottom = -12.0
+offset_bottom = -22.0
 flat = true
 
 [node name="10" type="Button" parent="EquipmentStock/Buttons"]
 layout_mode = 0
-offset_top = -12.0
+offset_top = -23.0
 offset_right = 122.0
-offset_bottom = -4.0
+offset_bottom = -15.0
 flat = true
 
 [node name="StaffList" parent="." instance=ExtResource("16_87g0b")]
