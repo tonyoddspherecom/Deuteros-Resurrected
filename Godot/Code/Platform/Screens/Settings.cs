@@ -93,8 +93,8 @@ public partial class Settings : Node2D
 			gameData.GetItem(Enums.ItemTypes.r_frame).Research.Researched = true;
 			gameData.GetItem(Enums.ItemTypes.r_frame).Research.ResearchOrder = GameCore.SingletonInstance.GameData.ActiveSaveFile.BaseGameData.ItemList.Where(T => T.Research != null && T.Research.Researched).Count();
 			gameData.GetItem(Enums.ItemTypes.r_frame).Locked = false;
-        }
-    }
+		}
+	}
 
 	private void ProdInEarthOrbit_Pressed()
 	{
@@ -265,7 +265,7 @@ public partial class Settings : Node2D
 			newShuttle.PlanetLocation = Enums.StellarBodies.earth;
 			newShuttle.ShipType = Enums.Ship_Types.Shuttle;
 			newShuttle.LocationView = false;
-			newShuttle.Name = "Shuttle Craft";
+			newShuttle.Name = "Earth Shuttle";
 
 			GameCore.SingletonInstance.GameData.ActiveSaveFile.Ships.Add(newShuttle);
 			GameCore.SingletonInstance.TriggerShipCreated(newShuttle);

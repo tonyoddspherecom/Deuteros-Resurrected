@@ -89,8 +89,8 @@ namespace Deuteros.Code.Platform.Screens
 
 			SelectedButton = clickedButton;
 
-            if (!CurrentFactory.AOC)
-                SelectedButton.Selected = true;
+			if (!CurrentFactory.AOC)
+				SelectedButton.Selected = true;
 
 			CheckProductionStart();
 
@@ -173,10 +173,11 @@ namespace Deuteros.Code.Platform.Screens
 								CurrentFactory.ProductionQueue.Remove(production);
 							}
 						}
-                    }
-                }
-            }
-        }
+						SelectedButton = null;
+					}
+				}
+			}
+		}
 
 		protected override void ResearchFinished(Objects.ResearchItem researchItem)
 		{
@@ -257,6 +258,14 @@ namespace Deuteros.Code.Platform.Screens
 				ItemProgressImageTextureRect = SpriteManager.LoadImageToTextureRect(ProductionProgressSpriteBasePath + "idle.png", ItemProgressImageTextureRect);
 			}
 
+			if (CurrentFactory.AOC)
+			{
+				foreach(ProductionButton b in Buttons)
+				{
+                    b.Redraw(false);
+                }
+            }
+
 		}
 
 		#region Statics
@@ -276,18 +285,18 @@ namespace Deuteros.Code.Platform.Screens
 				{
 					if (currentFactory != null)
 					{
-                        if (currentFactory.CurrentProductionItem() == null && currentFactory.AOC)
-                        {
-                            var productionItem = currentFactory.ProductionQueue.FirstOrDefault(T => CheckResourceAvailable(currentPlanet, T.Product, currentFactory.Ground)); ;
+						if (currentFactory.CurrentProductionItem() == null && currentFactory.AOC)
+						{
+							var productionItem = currentFactory.ProductionQueue.FirstOrDefault(T => CheckResourceAvailable(currentPlanet, T.Product, currentFactory.Ground)); ;
 
 							if (productionItem != null)
 							{
-                                RemoveResourceByItem(currentPlanet, productionItem.Product, currentFactory.Ground);
-                                productionItem.Active = true;
+								RemoveResourceByItem(currentPlanet, productionItem.Product, currentFactory.Ground);
+								productionItem.Active = true;
 							}
-                        }
+						}
 
-                        currentFactory.IncrementCurrentProd();
+						currentFactory.IncrementCurrentProd();
 
 						if (currentFactory.CurrentProductionItem() != null)
 						{
@@ -297,7 +306,7 @@ namespace Deuteros.Code.Platform.Screens
 
 								currentPlanet.AddItems(currentFactory.CurrentProductionItem().Product.ItemType, 1);
 
-                                if (!currentFactory.AOC) currentFactory.Builder.ActionsTaken++;
+								if (!currentFactory.AOC) currentFactory.Builder.ActionsTaken++;
 								currentFactory.ProdCycle = 0;
 
 								GameCore.SingletonInstance.TriggerProductionFinished(currentFactory);
@@ -334,20 +343,20 @@ namespace Deuteros.Code.Platform.Screens
 								{
 									var nextItem = currentFactory.ProductionQueue.FirstOrDefault(T => T != currentFactory.CurrentProductionItem() && (CheckResourceAvailable(currentPlanet, T.Product, currentFactory.Ground)));
 									var currItem = currentFactory.CurrentProductionItem();
-									currItem.Active = false;
 									currItem.Production_Complete = 1;
-                                    currItem.Production_Value = currItem.Product.Research.ResearchValue;
+									currItem.Production_Value = currItem.Product.Research.ResearchValue;
 
 									if (nextItem != null)
 									{
+										currItem.Active = false;
 										RemoveResourceByItem(currentPlanet, nextItem.Product, currentFactory.Ground);
 										nextItem.Active = true;
 									}
-                                }
+								}
 								else
 								{
-                                    currentFactory.ProductionQueue.Remove(currentFactory.CurrentProductionItem());
-                                }
+									currentFactory.ProductionQueue.Remove(currentFactory.CurrentProductionItem());
+								}
                             }
 						}
 

@@ -196,17 +196,33 @@ namespace Deuteros.Code.Platform.Screens
 
 		private void AddACC_Pressed()
 		{
-			Ship.ACC = new Objects.ACC();
-			Ship.ACC.Ship = Ship;
-			Ship.ACC.Source = CurrentPlanet.PlanetId;
-			Ship.ACC.Destination = CurrentPlanet.PlanetId;
-			Ship.ACC.Active = false;
-			Ship.ACC.CycleMode = false;
-			Ship.ACC.SourceItems = new List<ItemTypes>();
-			Ship.ACC.DestinationItems = new List<ItemTypes>();
-			Ship.ACC.CurrentSource = ItemTypes.iron;
-			Ship.ACC.CurrentDestination = ItemTypes.iron;
-			
+			Objects.Store stores;
+			if (Ground)
+			{
+				stores = CurrentPlanet.PlanetResources.Stores;
+			}
+			else
+			{
+				stores = CurrentPlanet.Station.Resources.Stores;
+			}
+
+			if (stores[ItemTypes.a__c__c] > 0)
+			{
+				Ship.ACC = new Objects.ACC();
+				Ship.ACC.Ship = Ship;
+				Ship.ACC.Source = CurrentPlanet.PlanetId;
+				Ship.ACC.Destination = CurrentPlanet.PlanetId;
+				Ship.ACC.Active = false;
+				Ship.ACC.CycleMode = false;
+				Ship.ACC.SourceItems = new List<ItemTypes>();
+				Ship.ACC.DestinationItems = new List<ItemTypes>();
+				Ship.ACC.CurrentSource = ItemTypes.iron;
+				Ship.ACC.CurrentDestination = ItemTypes.iron;
+
+				stores[Enums.ItemTypes.a__c__c]--;
+			}
+
+
 			UpdateState();
 		}
 
@@ -274,7 +290,7 @@ namespace Deuteros.Code.Platform.Screens
 				newShuttle.PlanetLocation = CurrentPlanet.PlanetId;
 				newShuttle.ShipType = Enums.Ship_Types.Shuttle;
 				newShuttle.LocationView = false;
-				newShuttle.Name = CurrentPlanet.PlanetId.ToScreenString()+" Shuttle";
+				newShuttle.Name = CurrentPlanet.PlanetId.ToScreenString(" ")+" Shuttle";
 
 				GameCore.SingletonInstance.GameData.ActiveSaveFile.Ships.Add(newShuttle);
 
@@ -826,7 +842,7 @@ namespace Deuteros.Code.Platform.Screens
 			for (int i = 0; i < 11; i++)
 			{
 				EquipmentStockNameLabels[i].RemoveThemeColorOverride("font_color");
-                EquipmentStockCountLabels[i].RemoveThemeColorOverride("font_color");
+				EquipmentStockCountLabels[i].RemoveThemeColorOverride("font_color");
 
 				if (equipmentList.Count() > i)
 				{

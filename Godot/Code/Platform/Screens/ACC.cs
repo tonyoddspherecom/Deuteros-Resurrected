@@ -172,8 +172,8 @@ namespace Deuteros.Code.Platform.Screens
 			}
 			else
 			{
-				SourceName.Text = CurrentACC.Source.ToString();
-				DestinationName.Text = CurrentACC.Destination.ToString();
+				SourceName.Text = CurrentACC.Source.ToScreenString(" ");
+				DestinationName.Text = CurrentACC.Destination.ToScreenString(" ");
 			}
 
 			Warning.Visible = !CurrentACC.Ship.Modules.Any(T => T.ModuleType == Module_Types.Supply);

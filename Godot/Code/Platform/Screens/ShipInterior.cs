@@ -242,18 +242,18 @@ namespace Deuteros.Code.Platform.Screens
 						await ShowBattleFrame((InterStellarShip)Ship, enemyShip);
 
 						if (GameCore.SingletonInstance.GameData.ActiveSaveFile.BaseGameData.Planets[Ship.PlanetLocation].ActiveMethanoid)
-                        {
-                            //move remaining drones back to store
-                            GameCore.SingletonInstance.GameData.ActiveSaveFile.BaseGameData.Planets[Ship.PlanetLocation].Station.Resources.Stores[ItemTypes.ios_drone] += enemyShip.DroneCount;
-                        }
+						{
+							//move remaining drones back to store
+							GameCore.SingletonInstance.GameData.ActiveSaveFile.BaseGameData.Planets[Ship.PlanetLocation].Station.Resources.Stores[ItemTypes.ios_drone] += enemyShip.DroneCount;
+						}
 						else if (!((EnemyFleet)enemyShip).Attacking)
-                        {
+						{
 							//enemy fleet has fled
 
 							((EnemyFleet)enemyShip).CancelAttack(Ship.PlanetLocation);
-                        }
+						}
 
-                        if (((InterStellarShip)Ship).DroneCount == 0)
+						if (((InterStellarShip)Ship).DroneCount == 0)
 						{
 							//player Ship destroyed
 							GameCore.SingletonInstance.GameData.ActiveSaveFile.Ships.Remove(Ship);
@@ -478,11 +478,14 @@ namespace Deuteros.Code.Platform.Screens
 			if (CurrentPlanet == null && Ship.ShipState != Ship_States.InTransit)
 				CurrentPlanet = GameCore.SingletonInstance.GameData.ActiveSaveFile.BaseGameData.Planets[Ship.PlanetLocation];
 
-			ShipName.Text = Ship.Name;
+			if (Ship.GetType() == typeof(Shuttle))
+				ShipName.Text = "Shuttle Craft";
+			else
+				ShipName.Text = Ship.Name;
 
 			if (Ship.GetType() != typeof(Shuttle) && GameCore.SingletonInstance.GameData.ActiveSaveFile.AtWar &&
 				(GameCore.SingletonInstance.GameData.ActiveSaveFile.BaseGameData.Planets[Ship.PlanetLocation].ActiveMethanoid ||
-                GameCore.SingletonInstance.GameData.PlanetUnderAttack(Ship.PlanetLocation)))
+				GameCore.SingletonInstance.GameData.PlanetUnderAttack(Ship.PlanetLocation)))
 				Status.Text = "UNDER ATTACK !\n" + Ship.PlanetLocation.ToScreenString(" ");
 
 			else if (Ship.GetType() == typeof(Shuttle) && Ship.ShipState == Ship_States.CrewRepairing)
@@ -812,7 +815,7 @@ namespace Deuteros.Code.Platform.Screens
 						!((InterStellarShip)ship).MethanoidOwned &&
 						ship.ShipState == Ship_States.UnDocked &&
 						(GameCore.SingletonInstance.GameData.ActiveSaveFile.BaseGameData.Planets[ship.PlanetLocation].ActiveMethanoid ||
-                        GameCore.SingletonInstance.GameData.PlanetUnderAttack(ship.PlanetLocation))
+						GameCore.SingletonInstance.GameData.PlanetUnderAttack(ship.PlanetLocation))
 					)
 					{
 						((InterStellarShip)ship).AttackedCount++;
